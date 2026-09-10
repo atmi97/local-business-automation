@@ -2,6 +2,9 @@
 
 A turnkey business-in-a-box for launching a local business review & reputation agency in Saskatoon, Saskatchewan. Built using Alex Hormozi's *$100M Offers*, *$100M Leads*, and *$100M Money Models* frameworks to transition from high-margin physical NFC hardware ($97 CAD) into recurring B2B software subscriptions ($97–$297/mo).
 
+🌐 **Live Web Platform (GitHub Pages)**: [https://atmi97.github.io/local-business-automation/](https://atmi97.github.io/local-business-automation/)  
+🐙 **GitHub Repository**: [https://github.com/atmi97/local-business-automation](https://github.com/atmi97/local-business-automation)
+
 ---
 
 ## 📋 Master Execution Plan
