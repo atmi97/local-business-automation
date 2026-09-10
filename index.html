@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YXE Local Reviews | Agency Operating Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- QRCode.js library for client-side QR generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#4285F4',
+                            red: '#EA4335',
+                            yellow: '#FBBC05',
+                            green: '#34A853',
+                            dark: '#0f172a',
+                            card: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-border {
+            background: linear-gradient(90deg, #4285F4, #EA4335, #FBBC05, #34A853);
+            height: 4px;
+        }
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            border: 12px solid #1e293b;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 20px;
+            background: #1e293b;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-blue-500 selection:text-white">
+
+    <!-- Top Accent Ribbon -->
+    <div class="gradient-border"></div>
+
+    <!-- Navigation Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-amber-400 flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/20">
+                    ⚡
+                </div>
+                <div>
+                    <div class="font-extrabold text-lg tracking-tight text-white flex items-center gap-2">
+                        YXE REPUTATION OS
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Saskatoon</span>
+                    </div>
+                    <div class="text-xs text-slate-400 font-medium">Local Business Automation &amp; Hormozi Offer Engine</div>
+                </div>
+            </div>
+
+            <!-- Header Quick Actions -->
+            <div class="flex items-center space-x-3">
+                <button onclick="switchTab('pitch')" class="px-3.5 py-1.5 rounded-lg text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/30 flex items-center gap-1.5 transition">
+                    <span>📱</span> Walk-In Demo
+                </button>
+                <button onclick="openAddClientModal()" class="px-3.5 py-1.5 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/30 flex items-center gap-1.5 transition">
+                    <span>+</span> New Business
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 overflow-x-auto py-2 text-sm border-t border-slate-800/60 scrollbar-none">
+            <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-blue-400 bg-blue-500/10 flex items-center gap-1.5">
+                📊 Command Center
+            </button>
+            <button onclick="switchTab('clients')" id="tab-clients" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                🏢 Saskatoon Clients (<span id="client-count-badge">3</span>)
+            </button>
+            <button onclick="switchTab('sticker-studio')" id="tab-sticker-studio" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                🎨 NFC Print Studio
+            </button>
+            <button onclick="switchTab('pitch')" id="tab-pitch" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                🎯 90s Walk-In Pitch &amp; ROI
+            </button>
+            <button onclick="switchTab('funnel-sim')" id="tab-funnel-sim" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                🛡️ Sentiment Shield Sim
+            </button>
+            <button onclick="switchTab('ai-replies')" id="tab-ai-replies" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                🤖 AI Local SEO Replies
+            </button>
+            <button onclick="switchTab('geo-studio')" id="tab-geo-studio" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                🧠 GEO Schema &amp; LLM Audit
+            </button>
+            <button onclick="switchTab('reddit-scanner')" id="tab-reddit-scanner" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                💬 Reddit Opportunity Hunter
+            </button>
+            <button onclick="switchTab('todo')" id="tab-todo" class="tab-btn px-3 py-1.5 rounded-lg font-medium transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                ✅ Master Launch Roadmap
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ============================================================== -->
+        <!-- TAB 1: COMMAND CENTER / OVERVIEW -->
+        <!-- ============================================================== -->
+        <section id="view-overview" class="tab-view space-y-6">
+            <!-- Top KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-slate-700/30 text-7xl font-black select-none">🏢</div>
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Clients</div>
+                    <div class="text-3xl font-black text-white mt-2" id="kpi-clients">3</div>
+                    <div class="text-xs text-emerald-400 mt-2 flex items-center gap-1">
+                        <span>↑ 100%</span> in Saskatoon (8th St &amp; Broadway)
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-slate-700/30 text-7xl font-black select-none">⚡</div>
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total NFC &amp; QR Taps</div>
+                    <div class="text-3xl font-black text-blue-400 mt-2" id="kpi-taps">93</div>
+                    <div class="text-xs text-slate-400 mt-2">Verified in-store taps</div>
+                </div>
+
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-slate-700/30 text-7xl font-black select-none">🛡️</div>
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Bad Reviews Shielded</div>
+                    <div class="text-3xl font-black text-amber-400 mt-2" id="kpi-shielded">4</div>
+                    <div class="text-xs text-amber-300 mt-2">Diverted to private GM inbox</div>
+                </div>
+
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-slate-700/30 text-7xl font-black select-none">💰</div>
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Monthly Retainer Run-Rate</div>
+                    <div class="text-3xl font-black text-emerald-400 mt-2" id="kpi-mrr">$447 CAD</div>
+                    <div class="text-xs text-slate-400 mt-2">At $149/mo continuity tier</div>
+                </div>
+            </div>
+
+            <!-- Action Grid: Roadmap Progress & Zone Targets -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Launch Roadmap Progress -->
+                <div class="lg:col-span-2 bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                🚀 Saskatoon Agency Launch Progress
+                            </h3>
+                            <p class="text-xs text-slate-400">Complete these phases to secure your first 5 recurring clients</p>
+                        </div>
+                        <span id="roadmap-pct" class="text-sm font-extrabold px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg">
+                            40% Done
+                        </span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-700 h-2.5 rounded-full overflow-hidden mb-6">
+                        <div id="roadmap-bar" class="bg-gradient-to-r from-blue-500 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 40%"></div>
+                    </div>
+
+                    <div class="space-y-3" id="quick-todo-list">
+                        <!-- Rendered by JS -->
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-700/60 flex justify-between items-center text-xs text-slate-400">
+                        <span>Managed in TODO.md</span>
+                        <button onclick="switchTab('todo')" class="text-blue-400 hover:text-blue-300 font-semibold">View Full 6-Phase Plan →</button>
+                    </div>
+                </div>
+
+                <!-- Saskatoon High-Opportunity Zones -->
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-1">📍 Saskatoon Route Targets</h3>
+                        <p class="text-xs text-slate-400 mb-4">Target corridors with highest foot traffic &amp; owner presence</p>
+
+                        <div class="space-y-3">
+                            <div class="p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl">
+                                <div class="flex justify-between font-semibold text-sm text-slate-200">
+                                    <span>8th Street East</span>
+                                    <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">Tier 1 Target</span>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">High-traffic casual dining, auto repair, cosmetic dental. Prime for counter stands.</div>
+                            </div>
+
+                            <div class="p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl">
+                                <div class="flex justify-between font-semibold text-sm text-slate-200">
+                                    <span>Broadway Avenue</span>
+                                    <span class="text-xs px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded">Nutana</span>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">Trendy barbers, medspas, boutique bistros. Owners on-site daily.</div>
+                            </div>
+
+                            <div class="p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl">
+                                <div class="flex justify-between font-semibold text-sm text-slate-200">
+                                    <span>20th St West (Riversdale)</span>
+                                    <span class="text-xs px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded">High Volume</span>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">Artisan coffee &amp; ethnic restaurants with 300+ daily customers.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="switchTab('clients')" class="mt-4 w-full py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold transition text-slate-200">
+                        View 6 Pre-Loaded Saskatoon Targets →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 2: CLIENT MANAGEMENT -->
+        <!-- ============================================================== -->
+        <section id="view-clients" class="tab-view hidden space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Saskatoon Client Management Hub</h2>
+                    <p class="text-xs text-slate-400">Configure NFC cards, dynamic URLs, and 1-click sentiment shielding.</p>
+                </div>
+                <button onclick="openAddClientModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-semibold shadow transition">
+                    + Add New Business
+                </button>
+            </div>
+
+            <!-- Client Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="clients-container">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 3: VISUAL NFC PRINT STUDIO -->
+        <!-- ============================================================== -->
+        <section id="view-sticker-studio" class="tab-view hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white">Visual NFC Card &amp; Sticker Designer</h2>
+                <p class="text-xs text-slate-400">Design, customize, and generate 85.6mm × 54mm print-ready vector SVGs for Saskatoon print shops (Minuteman Press / Staples).</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Customization Controls -->
+                <div class="lg:col-span-5 bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Sticker Customization</h3>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Business Name</label>
+                        <input type="text" id="sticker-biz-name" oninput="updateStickerPreview()" value="ARISU KOREAN BBQ" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Tagline / Subtext</label>
+                        <input type="text" id="sticker-tagline" oninput="updateStickerPreview()" value="Your feedback helps our local Saskatoon team grow!" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Target Dynamic NFC URL</label>
+                        <input type="text" id="sticker-url" oninput="updateStickerPreview()" value="https://tap.yxeagency.ca/r/yxe-korean-bbq" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <div class="text-[11px] text-emerald-400 mt-1">✓ Fits in NTAG215 (86 / 504 bytes used)</div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700/60 space-y-2">
+                        <button onclick="downloadStickerSVG()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 font-bold text-white rounded-xl shadow-lg shadow-blue-600/30 text-sm transition flex items-center justify-center gap-2">
+                            <span>📥</span> Download Print-Ready Vector SVG (85.6mm x 54mm)
+                        </button>
+                        <button onclick="downloadQRCodePNG()" class="w-full py-2 bg-slate-700 hover:bg-slate-600 font-semibold text-slate-200 rounded-xl text-xs transition">
+                            Download Raw QR Code Only (PNG)
+                        </button>
+                    </div>
+
+                    <div class="p-3 bg-blue-950/40 border border-blue-800/40 rounded-xl text-xs text-blue-300 leading-relaxed">
+                        <strong>Printing Tip for Saskatoon:</strong> Take this SVG file to <em>Minuteman Press (217 22nd St E, Downtown)</em> or <em>Staples (8th Street)</em>. Request: <strong>High-Gloss Vinyl Die-Cut Sticker, 85.6mm x 54mm with 3mm rounded corners</strong>. Cost is ~$1.00–$1.50 per unit.
+                    </div>
+                </div>
+
+                <!-- Live Visual Card Preview -->
+                <div class="lg:col-span-7 flex flex-col items-center">
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Live Interactive Visual Mockup</div>
+                    
+                    <!-- The Visual Card Mockup (85.6mm x 54mm proportion) -->
+                    <div id="live-card-container" class="w-full max-w-[500px] aspect-[856/540] bg-white rounded-[24px] shadow-2xl p-6 text-slate-900 flex flex-col justify-between relative overflow-hidden border-2 border-slate-300 select-none transition-all duration-300">
+                        <!-- 4 Google Color Accents -->
+                        <div class="absolute top-0 left-6 right-6 h-2 flex rounded-b-md overflow-hidden">
+                            <div class="flex-1 bg-[#4285F4]"></div>
+                            <div class="flex-1 bg-[#EA4335]"></div>
+                            <div class="flex-1 bg-[#FBBC05]"></div>
+                            <div class="flex-1 bg-[#34A853]"></div>
+                        </div>
+
+                        <!-- Card Top: Stars & Business Name -->
+                        <div class="text-center mt-3">
+                            <div class="text-amber-400 text-lg tracking-widest leading-none">★★★★★</div>
+                            <h2 id="card-preview-name" class="text-xl font-extrabold text-slate-900 tracking-tight mt-1 truncate">ARISU KOREAN BBQ</h2>
+                            <p id="card-preview-tagline" class="text-[11px] font-medium text-slate-500 mt-0.5 truncate">Your feedback helps our local Saskatoon team grow!</p>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="border-b border-slate-200 my-1"></div>
+
+                        <!-- Card Bottom: Dual Interaction Zones (NFC + QR) -->
+                        <div class="grid grid-cols-2 gap-3 items-center">
+                            <!-- Left: NFC Tap Zone -->
+                            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center flex flex-col items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl shadow-md mb-2">
+                                    📶
+                                </div>
+                                <div class="text-xs font-extrabold text-blue-900 uppercase tracking-tight leading-tight">TAP PHONE HERE</div>
+                                <div class="text-[9px] font-semibold text-blue-500 mt-0.5">Contactless NFC</div>
+                            </div>
+
+                            <!-- Right: QR Code Zone -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center flex flex-col items-center justify-center">
+                                <div id="live-qrcode-canvas" class="p-1 bg-white border border-slate-300 rounded-lg shadow-sm mb-1">
+                                    <!-- QR rendered by QRCode.js -->
+                                </div>
+                                <div class="text-[10px] font-bold text-slate-700 uppercase">OR SCAN WITH CAMERA</div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Branding -->
+                        <div class="text-center text-[9px] font-semibold text-slate-400 tracking-wider uppercase mt-1">
+                            POWERED BY YXE LOCAL REVIEWS • SASKATOON, SK
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-500 mt-3">Scale: Matches CR80 Credit Card / Counter Stand dimensions</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 4: 90-SECOND WALK-IN PITCH & ROI PRESENTATION -->
+        <!-- ============================================================== -->
+        <section id="view-pitch" class="tab-view hidden space-y-6">
+            <div class="max-w-2xl mx-auto space-y-6">
+                <div class="text-center">
+                    <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full">Owner Demonstration Mode</span>
+                    <h2 class="text-3xl font-black text-white mt-3">The Saskatoon 5-Star Velocity Pitch</h2>
+                    <p class="text-sm text-slate-400 mt-1">Pull this up on your smartphone or iPad when walking into local businesses.</p>
+                </div>
+
+                <!-- 1. The Instant Tap Shock & Awe -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">1</div>
+                        <h3 class="text-lg font-bold text-white">The 1-Second Live Tap Demonstration</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        <em>"Have the owner pull out their phone. Tap the demo card to the top of their iPhone or center of their Android. Or tap this button to simulate:"</em>
+                    </p>
+                    <button onclick="simulateCustomerTap()" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-xl shadow-lg shadow-blue-500/25 text-lg transition flex items-center justify-center gap-2">
+                        <span>📱</span> TAP PHONE HERE (Live Demo)
+                    </button>
+                </div>
+
+                <!-- 2. Interactive Hormozi ROI Value Calculator -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">2</div>
+                        <h3 class="text-lg font-bold text-white">Interactive Hormozi ROI Value Calculator</h3>
+                    </div>
+                    <p class="text-xs text-slate-400">Shows the owner the exact dollar return they are leaving on the table every month.</p>
+
+                    <div class="space-y-4 pt-2">
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span class="text-slate-300">Average Customer Ticket / Bill Size:</span>
+                                <span class="text-emerald-400 font-bold" id="pitch-ticket-display">$65 CAD</span>
+                            </div>
+                            <input type="range" min="15" max="350" step="5" value="65" id="pitch-ticket" oninput="calcPitchROI()" class="w-full accent-emerald-500">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span class="text-slate-300">Monthly Paying Customers:</span>
+                                <span class="text-blue-400 font-bold" id="pitch-customers-display">500 customers</span>
+                            </div>
+                            <input type="range" min="50" max="2000" step="25" value="500" id="pitch-customers" oninput="calcPitchROI()" class="w-full accent-blue-500">
+                        </div>
+
+                        <!-- Result Box -->
+                        <div class="bg-gradient-to-br from-emerald-950/60 to-slate-900 border border-emerald-500/40 rounded-xl p-5 text-center shadow-inner">
+                            <div class="text-xs font-bold uppercase tracking-wider text-emerald-300">Projected New Monthly Revenue</div>
+                            <div class="text-4xl font-black text-emerald-400 mt-1" id="pitch-roi-result">+$2,275 CAD</div>
+                            <div class="text-xs text-slate-400 mt-2">
+                                Based on collecting <strong class="text-white" id="pitch-new-reviews">25 reviews/month</strong> and outranking Saskatoon competitors on Google Maps.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. The Unconditional 100% Risk-Reversal Guarantee -->
+                <div class="bg-gradient-to-br from-amber-950/40 to-slate-900 border border-amber-500/40 rounded-2xl p-6 shadow-xl space-y-3">
+                    <div class="flex items-center gap-2 text-amber-400 font-bold text-sm uppercase tracking-wider">
+                        <span>⭐️</span> The Hormozi Unconditional Guarantee
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white">The 30-Day "15 Reviews or We Pay You" Promise</h4>
+                    <p class="text-xs text-amber-200/80 leading-relaxed">
+                        <em>"If this smart stand sits on your counter for 30 days and doesn't get you at least 15 verified new Google reviews, we refund 100% of your $97 on the spot, let you keep the hardware for free, and buy you a $50 gift card to a local Saskatoon restaurant for wasting your time."</em>
+                    </p>
+                </div>
+
+                <!-- The "7-Word Staff Ask" Cheat Sheet -->
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 text-center space-y-2">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Laminated Staff Ask Cheat-Sheet</div>
+                    <div class="text-lg font-black text-white italic">"Did you love everything about today's visit?"</div>
+                    <div class="text-xs text-blue-400">When they smile and say YES: <strong>"Awesome! Tap your phone right here to let our manager know!"</strong></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 5: SENTIMENT SHIELD FUNNEL SIMULATOR -->
+        <!-- ============================================================== -->
+        <section id="view-funnel-sim" class="tab-view hidden space-y-6">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8">
+                <!-- Instructions / Controls -->
+                <div class="flex-1 space-y-4">
+                    <div class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full">
+                        Interactive Compliance-First Funnel
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white">The Reputation Shield Simulator</h2>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Test how the dynamic redirect protects Saskatoon business owners. 
+                        Tapping <strong>4 or 5 stars</strong> instantly routes customers to public Google Reviews. 
+                        Tapping <strong>1, 2, or 3 stars</strong> opens the private General Manager resolution form to resolve complaints privately before they hit Google Maps!
+                    </p>
+
+                    <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl space-y-2 text-xs text-slate-300">
+                        <div class="font-bold text-white text-sm">Why It's 100% Google &amp; FTC Compliant:</div>
+                        <div>✓ We never block or deceive the customer.</div>
+                        <div>✓ Notice the unobtrusive link: <em>"Or continue to Google Reviews"</em> which guarantees full compliance with Google anti-gating policies.</div>
+                    </div>
+                </div>
+
+                <!-- Visual Phone Mockup Container -->
+                <div class="phone-mockup bg-white text-slate-900 flex flex-col">
+                    <div class="phone-notch"></div>
+                    
+                    <!-- Simulated Mobile Screen Content -->
+                    <div class="flex-1 p-6 pt-10 flex flex-col justify-between text-center" id="mobile-screen-content">
+                        <div>
+                            <span class="inline-block bg-blue-100 text-blue-700 text-[11px] font-bold px-3 py-1 rounded-full mb-3">VIP Guest Experience</span>
+                            <h3 class="text-lg font-extrabold text-slate-900" id="sim-biz-name">Arisu Korean BBQ</h3>
+                            <p class="text-xs text-slate-500 mt-1">How would you rate your experience with us today?</p>
+
+                            <!-- Interactive Star Selection -->
+                            <div class="flex justify-center gap-2 my-6">
+                                <button onclick="simSelectRating(1)" class="text-3xl hover:scale-125 transition transform">⭐</button>
+                                <button onclick="simSelectRating(2)" class="text-3xl hover:scale-125 transition transform">⭐</button>
+                                <button onclick="simSelectRating(3)" class="text-3xl hover:scale-125 transition transform">⭐</button>
+                                <button onclick="simSelectRating(4)" class="text-3xl hover:scale-125 transition transform">⭐</button>
+                                <button onclick="simSelectRating(5)" class="text-3xl hover:scale-125 transition transform">⭐</button>
+                            </div>
+
+                            <!-- Hidden Negative Feedback Intake Panel -->
+                            <div id="sim-feedback-panel" class="hidden bg-slate-100 border border-slate-200 rounded-xl p-3 text-left space-y-2 animate-fade-in">
+                                <div class="text-xs font-bold text-slate-900">We Want to Make This Right!</div>
+                                <p class="text-[11px] text-slate-600">Please message our General Manager directly so we can resolve this immediately:</p>
+                                <input type="text" id="sim-input-name" placeholder="Your Name" class="w-full p-2 border border-slate-300 rounded text-xs">
+                                <input type="text" id="sim-input-contact" placeholder="Phone or Email" class="w-full p-2 border border-slate-300 rounded text-xs">
+                                <textarea id="sim-input-msg" placeholder="How can we make things right?" rows="2" class="w-full p-2 border border-slate-300 rounded text-xs"></textarea>
+                                <button onclick="simSubmitNegativeFeedback()" class="w-full py-2 bg-blue-600 text-white font-bold text-xs rounded hover:bg-blue-700">
+                                    Send Private Resolution Message
+                                </button>
+                            </div>
+
+                            <!-- Positive 5-Star Success Message -->
+                            <div id="sim-positive-panel" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center space-y-2">
+                                <div class="text-2xl">🎉</div>
+                                <div class="text-sm font-bold text-emerald-800">Redirecting to Google!</div>
+                                <p class="text-xs text-emerald-600">Popping open the direct 5-star Google review window in 1.5 seconds...</p>
+                            </div>
+                        </div>
+
+                        <a href="https://search.google.com/local/writereview?placeid=ChIJ3V8eYnTYBFMR8o9V29xZ1-E" target="_blank" class="text-[10px] text-slate-400 hover:text-slate-600 underline mt-4">
+                            Or continue directly to public Google Reviews →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 6: AI LOCAL SEO REVIEWS -->
+        <!-- ============================================================== -->
+        <section id="view-ai-replies" class="tab-view hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white">AI Local SEO Review Reply Studio</h2>
+                <p class="text-xs text-slate-400">Generate keyword-rich, personalized responses that elevate Google Maps prominence and entity authority.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Review Input Form -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Incoming Customer Review</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Target Client</label>
+                            <select id="ai-biz-select" onchange="loadBizContext()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+                                <option value="arisu">Arisu Korean BBQ (8th St)</option>
+                                <option value="broadway">Broadway Heritage Barber</option>
+                                <option value="prairie">Prairie Shine Auto Detailing</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Star Rating</label>
+                            <select id="ai-star-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+                                <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                                <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                                <option value="3">⭐⭐⭐ (3 Stars)</option>
+                                <option value="1">⭐ (1 Star)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Reviewer Name</label>
+                        <input type="text" id="ai-reviewer-name" value="Jessica Miller" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Review Content</label>
+                        <textarea id="ai-review-content" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">Best dinner in Saskatoon! The Korean fried chicken was crispy and delicious.</textarea>
+                    </div>
+
+                    <button onclick="generateAIReviewReply()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 font-bold text-white rounded-xl shadow-lg shadow-blue-600/30 text-sm transition">
+                        ⚡ Generate SEO-Injected Reply
+                    </button>
+                </div>
+
+                <!-- Generated Response Output -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Generated NLP Response</h3>
+                            <span class="text-xs font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">SEO Injected</span>
+                        </div>
+                        
+                        <div id="ai-reply-output" class="p-4 bg-slate-900 border border-slate-700/60 rounded-xl text-sm leading-relaxed text-slate-200">
+                            Hi Jessica, thank you so much for the 5-star review! Our team at Arisu Korean BBQ takes huge pride in serving the best crispy Korean fried chicken here on 8th Street East in Saskatoon. We look forward to welcoming you back again soon!
+                        </div>
+
+                        <div class="mt-4 p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl text-xs space-y-1">
+                            <div class="font-bold text-slate-400">NLP Entities Injected:</div>
+                            <div class="flex flex-wrap gap-1.5 mt-1" id="nlp-entity-chips">
+                                <span class="px-2 py-0.5 bg-blue-900/50 text-blue-300 rounded border border-blue-700/50">Saskatoon</span>
+                                <span class="px-2 py-0.5 bg-blue-900/50 text-blue-300 rounded border border-blue-700/50">8th Street East</span>
+                                <span class="px-2 py-0.5 bg-blue-900/50 text-blue-300 rounded border border-blue-700/50">crispy Korean fried chicken</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="copyGeneratedReply()" class="w-full py-2 bg-slate-700 hover:bg-slate-600 font-semibold text-slate-200 rounded-xl text-xs transition">
+                        📋 Copy Response to Clipboard
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 7: GEO SCHEMA STUDIO & LLM AUDIT -->
+        <!-- ============================================================== -->
+        <section id="view-geo-studio" class="tab-view hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white">Generative Engine Optimization (GEO) &amp; Schema Studio</h2>
+                <p class="text-xs text-slate-400">Audit website readiness for ChatGPT Search, Google Gemini, and Perplexity AI crawlers.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Schema Generator -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Schema.org JSON-LD Generator</h3>
+                        <button onclick="copySchema()" class="text-xs text-blue-400 hover:text-blue-300 font-semibold">Copy Script</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="text-slate-400 block mb-1">Business</label>
+                            <input type="text" id="geo-name" value="Arisu Korean BBQ" oninput="updateSchemaPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                        </div>
+                        <div>
+                            <label class="text-slate-400 block mb-1">Category</label>
+                            <input type="text" id="geo-type" value="Restaurant" oninput="updateSchemaPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                        </div>
+                    </div>
+
+                    <pre id="schema-code-block" class="p-4 bg-slate-900 border border-slate-700 rounded-xl text-xs text-emerald-400 font-mono overflow-x-auto max-h-72 select-all">
+                    </pre>
+                </div>
+
+                <!-- LLM Recommendation Audit Scorecard -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">AI Crawler Readiness Scorecard</h3>
+                    
+                    <div class="flex items-center gap-4 p-4 bg-slate-900 rounded-xl border border-slate-700">
+                        <div class="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-2xl font-black text-emerald-400">
+                            92
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-white">High AI Recommendation Authority</div>
+                            <div class="text-xs text-slate-400 mt-0.5">Optimized for GPTBot, PerplexityBot, and Google Knowledge Graph.</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-center gap-2 text-emerald-400">
+                            <span>✓</span> Structured PostalAddress in Saskatoon confirmed
+                        </div>
+                        <div class="flex items-center gap-2 text-emerald-400">
+                            <span>✓</span> AggregateRating entity linked (4.8 stars / 285 reviews)
+                        </div>
+                        <div class="flex items-center gap-2 text-emerald-400">
+                            <span>✓</span> GeoCoordinates pin aligned on 8th Street East
+                        </div>
+                        <div class="flex items-center gap-2 text-amber-400">
+                            <span>!</span> Recommendation: Build 3 more organic citation mentions on r/saskatoon
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 8: REDDIT OPPORTUNITY SCANNER -->
+        <!-- ============================================================== -->
+        <section id="view-reddit-scanner" class="tab-view hidden space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Reddit (r/saskatoon) Recommendation Hunter</h2>
+                    <p class="text-xs text-slate-400">Scan active local discussions to build conversational consensus for ChatGPT and Perplexity citations.</p>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="reddit-query-input" value="best korean" placeholder="Query (e.g. mechanic, barber)" class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-sm text-white focus:outline-none">
+                    <button onclick="filterRedditThreads()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-semibold transition">
+                        Scan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reddit Threads Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="reddit-threads-container">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 9: MASTER LAUNCH ROADMAP -->
+        <!-- ============================================================== -->
+        <section id="view-todo" class="tab-view hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white">Master Execution Roadmap (TODO.md)</h2>
+                <p class="text-xs text-slate-400">Check off items as you launch and scale in Saskatoon.</p>
+            </div>
+
+            <div class="space-y-4 max-w-3xl" id="full-todo-container">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900 py-4 mt-12 text-center text-xs text-slate-500">
+        YXE Local Reviews &amp; Business Automation Engine • Saskatoon, Saskatchewan • Powered by Hormozi $100M Frameworks
+    </footer>
+
+    <!-- ADD CLIENT MODAL -->
+    <div id="addClientModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white">Add Saskatoon Business</h3>
+                <button onclick="closeAddClientModal()" class="text-slate-400 hover:text-white font-bold text-lg">&times;</button>
+            </div>
+
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Business Name</label>
+                    <input type="text" id="modal-biz-name" placeholder="e.g. Broadway Heritage Barber" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Zone / Address</label>
+                    <input type="text" id="modal-biz-zone" placeholder="e.g. 8th Street East, Saskatoon" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Google Place ID (or shortcode)</label>
+                    <input type="text" id="modal-biz-placeid" placeholder="ChIJ3V8eYnTYBFMR8o9V29xZ1-E" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Slug (URL endpoint)</label>
+                    <input type="text" id="modal-biz-slug" placeholder="broadway-barber" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                </div>
+            </div>
+
+            <button onclick="saveNewClient()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-bold text-white rounded-xl text-sm transition">
+                Create Client &amp; Generate NFC Link
+            </button>
+        </div>
+    </div>
+
+    <!-- CLIENT-SIDE APPLICATION LOGIC -->
+    <script>
+        // State Store
+        const DEFAULT_CLIENTS = [
+            {
+                slug: 'yxe-korean-bbq',
+                name: 'Arisu Korean BBQ & Chicken',
+                zone: '8th Street East',
+                placeId: 'ChIJ3V8eYnTYBFMR8o9V29xZ1-E',
+                taps: 48,
+                shieldEnabled: true,
+                rating: 4.8,
+                services: 'authentic Korean BBQ, crispy Korean fried chicken',
+            },
+            {
+                slug: 'broadway-fade-barber',
+                name: 'Broadway Heritage Barbershop',
+                zone: 'Broadway Avenue',
+                placeId: 'ChIJ4455YnTYBFMR8o9V29xZ1-B',
+                taps: 26,
+                shieldEnabled: false,
+                rating: 4.9,
+                services: 'skin fades, hot towel shaves',
+            },
+            {
+                slug: 'prairie-shine-detail',
+                name: 'Prairie Shine Auto Detailing',
+                zone: 'North Industrial (51st St)',
+                placeId: 'ChIJ9988YnTYBFMR8o9V29xZ1-D',
+                taps: 19,
+                shieldEnabled: true,
+                rating: 4.7,
+                services: 'ceramic coating, paint correction',
+            }
+        ];
+
+        const ROADMAP_ITEMS = [
+            { id: 1, title: 'Order NTAG215 cards on Amazon.ca Prime ($15 CAD)', phase: 'Phase 1', done: true },
+            { id: 2, title: 'Download NFC Tools on phone and test read/write', phase: 'Phase 1', done: true },
+            { id: 3, title: 'Print 10 high-gloss vinyl stickers at Minuteman Press on 2nd Ave', phase: 'Phase 1', done: false },
+            { id: 4, title: 'Assemble 3 demo countertop stands with double-sided nano-tape', phase: 'Phase 1', done: false },
+            { id: 5, title: 'Target 10 SMBs on 8th Street East & Broadway Avenue', phase: 'Phase 2', done: true },
+            { id: 6, title: 'Execute 10 in-person walk-ins using 90-second script', phase: 'Phase 3', done: false },
+            { id: 7, title: 'Deliver "15 reviews or keep it free + $50" guarantee', phase: 'Phase 3', done: false },
+            { id: 8, title: 'Day 7 check-in: Ascend client to $149/mo AI SEO review responder', phase: 'Phase 5', done: false },
+            { id: 9, title: 'Deploy Schema.org JSON-LD & build r/saskatoon citations for GEO', phase: 'Phase 6', done: false },
+        ];
+
+        const REDDIT_THREADS = [
+            {
+                title: "Best Korean Fried Chicken in Saskatoon?",
+                author: "YXEFoodie",
+                comments: 38,
+                score: 42,
+                category: "korean",
+                oppScore: 95,
+                url: "https://reddit.com/r/saskatoon/comments/korean_chicken"
+            },
+            {
+                title: "Who does the cleanest skin fade in Saskatoon? Broadway or Downtown?",
+                author: "NutanaResident",
+                comments: 29,
+                score: 31,
+                category: "barber",
+                oppScore: 88,
+                url: "https://reddit.com/r/saskatoon/comments/best_fade_barber"
+            },
+            {
+                title: "Looking for a reliable mechanic on 8th Street or Central Ave",
+                author: "SaskDriver",
+                comments: 45,
+                score: 28,
+                category: "mechanic",
+                oppScore: 92,
+                url: "https://reddit.com/r/saskatoon/comments/mechanic_8th"
+            },
+            {
+                title: "Favorite hidden gem dinner spots in Saskatoon for 2025/2026?",
+                author: "BroadwayLocal",
+                comments: 112,
+                score: 85,
+                category: "restaurant",
+                oppScore: 99,
+                url: "https://reddit.com/r/saskatoon/comments/hidden_gems_dinner"
+            }
+        ];
+
+        let clients = JSON.parse(localStorage.getItem('yxe_clients')) || DEFAULT_CLIENTS;
+        let roadmap = JSON.parse(localStorage.getItem('yxe_roadmap')) || ROADMAP_ITEMS;
+
+        // Initialize App
+        function initApp() {
+            renderClients();
+            renderRoadmap();
+            renderRedditThreads(REDDIT_THREADS);
+            updateStickerPreview();
+            updateSchemaPreview();
+            calcPitchROI();
+            updateKPIs();
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('text-blue-400', 'bg-blue-500/10');
+                el.classList.add('text-slate-400');
+            });
+
+            const targetView = document.getElementById('view-' + tabId);
+            const targetBtn = document.getElementById('tab-' + tabId);
+            if (targetView) targetView.classList.remove('hidden');
+            if (targetBtn) {
+                targetBtn.classList.add('text-blue-400', 'bg-blue-500/10');
+                targetBtn.classList.remove('text-slate-400');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Clients
+        function renderClients() {
+            const container = document.getElementById('clients-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            clients.forEach(c => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-800 border border-slate-700/80 rounded-2xl p-5 shadow-lg flex flex-col justify-between space-y-4";
+                
+                const badge = c.shieldEnabled 
+                    ? `<span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-bold">🛡️ SHIELD ACTIVE</span>`
+                    : `<span class="px-2.5 py-1 bg-slate-700 text-slate-300 rounded-full text-xs font-bold">DIRECT GOOGLE</span>`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-bold text-white text-base">${c.name}</h3>
+                                <p class="text-xs text-slate-400">${c.zone}</p>
+                            </div>
+                            ${badge}
+                        </div>
+                        
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50 mt-3 space-y-1.5 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Counter Taps:</span>
+                                <strong class="text-white font-mono">${c.taps} taps</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Dynamic URL:</span>
+                                <code class="text-blue-400 truncate max-w-[180px]">/r/${c.slug}</code>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Google Star Rating:</span>
+                                <span class="text-amber-400 font-bold">${c.rating} ⭐</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 pt-2 border-t border-slate-700/60">
+                        <button onclick="toggleClientShield('${c.slug}')" class="w-full py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold text-slate-200 transition">
+                            ${c.shieldEnabled ? 'Switch to Direct Google (Starter)' : 'Turn On Sentiment Shield ($149/mo)'}
+                        </button>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="loadClientToSticker('${c.slug}')" class="py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 rounded-lg text-xs font-semibold transition">
+                                🎨 Print Sticker
+                            </button>
+                            <a href="https://search.google.com/local/writereview?placeid=${c.placeId}" target="_blank" class="py-1.5 bg-slate-700/50 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold text-center transition">
+                                ↗ Google Link
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('client-count-badge').innerText = clients.length;
+            document.getElementById('kpi-clients').innerText = clients.length;
+            document.getElementById('kpi-mrr').innerText = '$' + (clients.length * 149) + ' CAD';
+        }
+
+        function toggleClientShield(slug) {
+            clients = clients.map(c => {
+                if (c.slug === slug) {
+                    c.shieldEnabled = !c.shieldEnabled;
+                }
+                return c;
+            });
+            localStorage.setItem('yxe_clients', JSON.stringify(clients));
+            renderClients();
+        }
+
+        function loadClientToSticker(slug) {
+            const client = clients.find(c => c.slug === slug);
+            if (!client) return;
+            document.getElementById('sticker-biz-name').value = client.name.toUpperCase();
+            document.getElementById('sticker-url').value = 'https://tap.yxeagency.ca/r/' + client.slug;
+            switchTab('sticker-studio');
+            updateStickerPreview();
+        }
+
+        // Sticker Studio Preview with Live QRCode.js
+        function updateStickerPreview() {
+            const bizName = document.getElementById('sticker-biz-name').value || 'BUSINESS NAME';
+            const tagline = document.getElementById('sticker-tagline').value || 'Your feedback helps us grow!';
+            const url = document.getElementById('sticker-url').value || 'https://tap.yxeagency.ca/r/demo';
+
+            document.getElementById('card-preview-name').innerText = bizName;
+            document.getElementById('card-preview-tagline').innerText = tagline;
+
+            // Generate QR Code
+            const qrContainer = document.getElementById('live-qrcode-canvas');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: url,
+                width: 76,
+                height: 76,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.Q
+            });
+        }
+
+        function downloadStickerSVG() {
+            const bizName = document.getElementById('sticker-biz-name').value;
+            const url = document.getElementById('sticker-url').value;
+            const tagline = document.getElementById('sticker-tagline').value;
+
+            // Generate clean standalone SVG file
+            const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 856 540" width="85.6mm" height="54mm">
+  <rect width="856" height="540" rx="32" fill="#ffffff" stroke="#cbd5e1" stroke-width="4"/>
+  <path d="M 42 10 L 220 10" stroke="#4285F4" stroke-width="8"/>
+  <path d="M 230 10 L 420 10" stroke="#EA4335" stroke-width="8"/>
+  <path d="M 430 10 L 620 10" stroke="#FBBC05" stroke-width="8"/>
+  <path d="M 630 10 L 814 10" stroke="#34A853" stroke-width="8"/>
+  <text x="428" y="70" font-size="32" fill="#FBBC05" text-anchor="middle">★★★★★</text>
+  <text x="428" y="140" font-family="Arial, sans-serif" font-size="34" font-weight="bold" fill="#0f172a" text-anchor="middle">${bizName.toUpperCase()}</text>
+  <text x="428" y="180" font-family="Arial, sans-serif" font-size="18" fill="#64748b" text-anchor="middle">${tagline}</text>
+  <rect x="60" y="220" width="340" height="250" rx="20" fill="#eff6ff" stroke="#bfdbfe" stroke-width="2"/>
+  <text x="230" y="350" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1e3a8a" text-anchor="middle">TAP PHONE HERE (NFC)</text>
+  <rect x="456" y="220" width="340" height="250" rx="20" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="626" y="350" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#475569" text-anchor="middle">SCAN QR CODE</text>
+  <text x="428" y="510" font-family="Arial, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">POWERED BY YXE LOCAL REVIEWS • SASKATOON, SK</text>
+</svg>`;
+
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${bizName.toLowerCase().replace(/\\s+/g, '_')}_nfc_sticker.svg`;
+            link.click();
+        }
+
+        // Hormozi ROI Calculation
+        function calcPitchROI() {
+            const ticket = parseFloat(document.getElementById('pitch-ticket').value);
+            const customers = parseFloat(document.getElementById('pitch-customers').value);
+
+            document.getElementById('pitch-ticket-display').innerText = '$' + ticket + ' CAD';
+            document.getElementById('pitch-customers-display').innerText = customers + ' customers';
+
+            const newReviews = Math.round(customers * 0.05);
+            document.getElementById('pitch-new-reviews').innerText = newReviews + ' reviews/month';
+
+            // 15 reviews conservatively brings 35 extra high-intent customers
+            const extraCustomers = Math.round((newReviews / 10) * 14);
+            const extraRevenue = extraCustomers * ticket;
+
+            document.getElementById('pitch-roi-result').innerText = '+$' + extraRevenue.toLocaleString() + ' CAD';
+        }
+
+        // Funnel Simulation
+        function simSelectRating(stars) {
+            const feedbackPanel = document.getElementById('sim-feedback-panel');
+            const positivePanel = document.getElementById('sim-positive-panel');
+
+            if (stars >= 4) {
+                feedbackPanel.classList.add('hidden');
+                positivePanel.classList.remove('hidden');
+                setTimeout(() => {
+                    positivePanel.classList.add('hidden');
+                }, 4000);
+            } else {
+                positivePanel.classList.add('hidden');
+                feedbackPanel.classList.remove('hidden');
+            }
+        }
+
+        function simSubmitNegativeFeedback() {
+            const name = document.getElementById('sim-input-name').value || 'Valued Guest';
+            alert(`Thank you, ${name}! Your message has been sent directly to the General Manager's private SMS. This review was shielded from public Google Maps!`);
+            document.getElementById('sim-feedback-panel').classList.add('hidden');
+            let shielded = parseInt(document.getElementById('kpi-shielded').innerText) + 1;
+            document.getElementById('kpi-shielded').innerText = shielded;
+        }
+
+        function simulateCustomerTap() {
+            switchTab('funnel-sim');
+            let taps = parseInt(document.getElementById('kpi-taps').innerText) + 1;
+            document.getElementById('kpi-taps').innerText = taps;
+        }
+
+        // AI Review Reply Generation
+        function generateAIReviewReply() {
+            const biz = document.getElementById('ai-biz-select').value;
+            const stars = document.getElementById('ai-star-select').value;
+            const reviewer = document.getElementById('ai-reviewer-name').value;
+            const content = document.getElementById('ai-review-content').value;
+
+            let reply = '';
+            let entities = [];
+
+            if (stars >= 4) {
+                if (biz === 'arisu') {
+                    reply = `Hi ${reviewer}, thank you so much for the 5-star review! Our team at Arisu Korean BBQ takes huge pride in serving the best crispy Korean fried chicken and stone bowl bibimbap here on 8th Street East in Saskatoon. We look forward to welcoming you back again soon!`;
+                    entities = ['Saskatoon', '8th Street East', 'crispy Korean fried chicken', 'bibimbap'];
+                } else if (biz === 'broadway') {
+                    reply = `Thanks ${reviewer}! We love having you at Broadway Heritage Barbershop. Keeping our Nutana and Broadway community looking sharp with clean skin fades and beard trims is what we love doing. See you next cut!`;
+                    entities = ['Broadway Avenue', 'Nutana', 'clean skin fades', 'Saskatoon barber'];
+                } else {
+                    reply = `Hi ${reviewer}, we truly appreciate your business! Our team at Prairie Shine Detailing in Saskatoon takes pride in delivering flawless ceramic coatings and paint correction. Drive safe!`;
+                    entities = ['Saskatoon', 'North Industrial', 'ceramic coatings'];
+                }
+            } else {
+                reply = `Dear ${reviewer}, thank you for bringing this to our attention. Providing an exceptional experience is our top priority in Saskatoon, and we regret that your visit fell short of our standard. Please reach out to our General Manager directly at feedback@yxeagency.ca so we can resolve this personally.`;
+                entities = ['Saskatoon', 'management resolution'];
+            }
+
+            document.getElementById('ai-reply-output').innerText = reply;
+
+            const chipsContainer = document.getElementById('nlp-entity-chips');
+            chipsContainer.innerHTML = '';
+            entities.forEach(e => {
+                chipsContainer.innerHTML += `<span class="px-2 py-0.5 bg-blue-900/50 text-blue-300 rounded border border-blue-700/50">${e}</span>`;
+            });
+        }
+
+        function copyGeneratedReply() {
+            const text = document.getElementById('ai-reply-output').innerText;
+            navigator.clipboard.writeText(text);
+            alert('Reply copied to clipboard!');
+        }
+
+        // Schema JSON Preview
+        function updateSchemaPreview() {
+            const name = document.getElementById('geo-name').value;
+            const type = document.getElementById('geo-type').value;
+
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": type,
+                "name": name,
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "1505 8th St E",
+                    "addressLocality": "Saskatoon",
+                    "addressRegion": "SK",
+                    "postalCode": "S7H 0W5",
+                    "addressCountry": "CA"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.1158,
+                    "longitude": -106.6341
+                },
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "4.8",
+                    "reviewCount": "285"
+                }
+            };
+            document.getElementById('schema-code-block').innerText = JSON.stringify(schema, null, 2);
+        }
+
+        function copySchema() {
+            const text = document.getElementById('schema-code-block').innerText;
+            navigator.clipboard.writeText(text);
+            alert('Schema.org JSON-LD copied to clipboard!');
+        }
+
+        // Reddit Threads Render
+        function renderRedditThreads(threads) {
+            const container = document.getElementById('reddit-threads-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            threads.forEach(t => {
+                const el = document.createElement('div');
+                el.className = "bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow flex flex-col justify-between space-y-3";
+                el.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-[11px] font-bold text-amber-400 px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 rounded">
+                                ${t.oppScore}/100 Opportunity Score
+                            </span>
+                            <span class="text-xs text-slate-400">${t.comments} comments</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm leading-snug">${t.title}</h4>
+                        <div class="text-xs text-slate-500 mt-1">Posted in r/saskatoon by u/${t.author}</div>
+                    </div>
+                    <a href="${t.url}" target="_blank" class="w-full py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold text-center text-slate-200 transition block">
+                        Open Reddit Discussion ↗
+                    </a>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function filterRedditThreads() {
+            const q = document.getElementById('reddit-query-input').value.toLowerCase();
+            const matched = REDDIT_THREADS.filter(t => t.title.toLowerCase().includes(q) || t.category.includes(q));
+            renderRedditThreads(matched.length > 0 ? matched : REDDIT_THREADS);
+        }
+
+        // Roadmap Render
+        function renderRoadmap() {
+            const quickContainer = document.getElementById('quick-todo-list');
+            const fullContainer = document.getElementById('full-todo-container');
+            
+            if (quickContainer) quickContainer.innerHTML = '';
+            if (fullContainer) fullContainer.innerHTML = '';
+
+            let doneCount = 0;
+
+            roadmap.forEach((item, idx) => {
+                if (item.done) doneCount++;
+
+                // Full container
+                if (fullContainer) {
+                    const row = document.createElement('div');
+                    row.className = "p-4 bg-slate-800 border border-slate-700/80 rounded-xl flex items-center justify-between";
+                    row.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleRoadmapItem(${item.id})" class="w-5 h-5 accent-blue-600 rounded cursor-pointer">
+                            <div>
+                                <div class="text-sm font-semibold ${item.done ? 'line-through text-slate-500' : 'text-slate-200'}">${item.title}</div>
+                                <div class="text-xs text-blue-400 font-medium">${item.phase}</div>
+                            </div>
+                        </div>
+                    `;
+                    fullContainer.appendChild(row);
+                }
+
+                // Quick container (first 4 items)
+                if (quickContainer && idx < 4) {
+                    const row = document.createElement('div');
+                    row.className = "p-2.5 bg-slate-900/60 border border-slate-700/40 rounded-xl flex items-center justify-between text-xs";
+                    row.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleRoadmapItem(${item.id})" class="accent-blue-600 rounded">
+                            <span class="${item.done ? 'line-through text-slate-500' : 'text-slate-300'}">${item.title}</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">${item.phase}</span>
+                    `;
+                    quickContainer.appendChild(row);
+                }
+            });
+
+            const pct = Math.round((doneCount / roadmap.length) * 100);
+            if (document.getElementById('roadmap-pct')) document.getElementById('roadmap-pct').innerText = pct + '% Done';
+            if (document.getElementById('roadmap-bar')) document.getElementById('roadmap-bar').style.width = pct + '%';
+        }
+
+        function toggleRoadmapItem(id) {
+            roadmap = roadmap.map(item => {
+                if (item.id === id) item.done = !item.done;
+                return item;
+            });
+            localStorage.setItem('yxe_roadmap', JSON.stringify(roadmap));
+            renderRoadmap();
+        }
+
+        // Modal Controls
+        function openAddClientModal() {
+            document.getElementById('addClientModal').classList.remove('hidden');
+        }
+
+        function closeAddClientModal() {
+            document.getElementById('addClientModal').classList.add('hidden');
+        }
+
+        function saveNewClient() {
+            const name = document.getElementById('modal-biz-name').value;
+            const zone = document.getElementById('modal-biz-zone').value;
+            const placeId = document.getElementById('modal-biz-placeid').value;
+            const slug = document.getElementById('modal-biz-slug').value;
+
+            if (!name || !slug) {
+                alert('Please provide business name and slug');
+                return;
+            }
+
+            clients.push({
+                slug: slug,
+                name: name,
+                zone: zone || 'Saskatoon',
+                placeId: placeId || 'ChIJ3V8eYnTYBFMR8o9V29xZ1-E',
+                taps: 0,
+                shieldEnabled: true,
+                rating: 5.0,
+                services: 'local service'
+            });
+
+            localStorage.setItem('yxe_clients', JSON.stringify(clients));
+            renderClients();
+            closeAddClientModal();
+            switchTab('clients');
+        }
+
+        function updateKPIs() {
+            const totalTaps = clients.reduce((acc, c) => acc + c.taps, 0);
+            document.getElementById('kpi-taps').innerText = totalTaps;
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>

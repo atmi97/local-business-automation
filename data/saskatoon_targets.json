@@ -1,0 +1,74 @@
+[
+  {
+    "id": "yxe_target_001",
+    "name": "Arisu Korean BBQ & Chicken",
+    "zone": "8th Street East",
+    "address": "1505 8th St E, Saskatoon, SK",
+    "category": "Korean Restaurant",
+    "avg_customer_value": "$45 - $80",
+    "current_review_profile": "High volume, but missing hundreds of potential reviews from takeout/counter guests.",
+    "seo_keywords": ["authentic Korean BBQ Saskatoon", "crispy Korean fried chicken", "8th street dinner"],
+    "pitch_hook": "Ask owner: 'You have some of the best fried chicken in Saskatoon, but people searching for 8th street dinner on Google Maps often see competitors first. Tapping this card at the checkout register will add 30 reviews a month on autopilot.'",
+    "recommended_offer": "Countertop Acrylic Stand on 14-day free trial -> $149/mo SEO AI Retainer"
+  },
+  {
+    "id": "yxe_target_002",
+    "name": "Broadway Heritage Barbershop",
+    "zone": "Broadway Avenue",
+    "address": "708 Broadway Ave, Saskatoon, SK",
+    "category": "Barbershop / Grooming",
+    "avg_customer_value": "$35 - $60",
+    "current_review_profile": "Loyal clientele, but clients leave without reviewing.",
+    "seo_keywords": ["best skin fade Saskatoon", "broadway barber", "beard trim YXE"],
+    "pitch_hook": "Tap demo while barber sweeps up: 'Every guy who sits in that chair leaves looking sharp and smiling. Handing them this card while they pay takes 2 seconds and guarantees you rank #1 for Broadway barbers.'",
+    "recommended_offer": "$97 CAD direct hardware purchase (2 pocket cards for barbers + 1 front register stand)"
+  },
+  {
+    "id": "yxe_target_003",
+    "name": "Prairie Shine Auto Detailing & Tint",
+    "zone": "North Industrial / 51st Street",
+    "address": "2345 Faithful Ave, Saskatoon, SK",
+    "category": "Auto Detailing & Ceramic Coating",
+    "avg_customer_value": "$250 - $1,200",
+    "current_review_profile": "High ticket, every single review is worth thousands in trust.",
+    "seo_keywords": ["ceramic coating Saskatoon", "auto detailing 51st st", "paint correction YXE"],
+    "pitch_hook": "Show owner: 'When someone drops $800 on a ceramic coating, they are blown away when they pick up their car. That exact moment is when you tap this to their phone. 5 more reviews a month will drive 10 more high-ticket bookings.'",
+    "recommended_offer": "Pocket NFC card + Front desk stand @ $149/mo Reputation Shield"
+  },
+  {
+    "id": "yxe_target_004",
+    "name": "Downtown Glow Aesthetics & Laser",
+    "zone": "Downtown Saskatoon",
+    "address": "140 2nd Ave S, Saskatoon, SK",
+    "category": "Medical Spa / Aesthetics",
+    "avg_customer_value": "$180 - $600",
+    "current_review_profile": "Clients are private; need an elegant, seamless way to invite reviews without feeling pushy.",
+    "seo_keywords": ["medspa downtown Saskatoon", "laser facial YXE", "microneedling Saskatoon"],
+    "pitch_hook": "'High-end aesthetic clients appreciate modern contactless tech. A luxury frosted acrylic stand on the reception console fits your modern decor and collects reviews discreetly while shielding you from negative feedback.'",
+    "recommended_offer": "Frosted acrylic stand + $297/mo Full GEO & AI Reputation Retainer"
+  },
+  {
+    "id": "yxe_target_005",
+    "name": "Keo's Kitchen",
+    "zone": "Broadway / 11th Street",
+    "address": "1013 Broadway Ave, Saskatoon, SK",
+    "category": "Thai / Southeast Asian Dining",
+    "avg_customer_value": "$40 - $70",
+    "current_review_profile": "Iconic local spot; high repeat regulars who never think to leave a new review.",
+    "seo_keywords": ["best pad thai Saskatoon", "broadway asian food", "keos kitchen reviews"],
+    "pitch_hook": "'You have dozens of regular patrons who eat here every week but haven't left a review in 3 years. One tap on the bill folder wakes up your Google profile recency.'",
+    "recommended_offer": "2 Table Talker stands + $149/mo Continuity"
+  },
+  {
+    "id": "yxe_target_006",
+    "name": "Riversdale Coffee & Bakeshop",
+    "zone": "20th Street West / Riversdale",
+    "address": "157 20th St W, Saskatoon, SK",
+    "category": "Artisan Cafe & Bakery",
+    "avg_customer_value": "$12 - $25",
+    "current_review_profile": "Extremely high daily transactions (300+ customers/day), massive tap potential.",
+    "seo_keywords": ["specialty coffee riversdale", "artisan bakery saskatoon", "best latte YXE"],
+    "pitch_hook": "'You serve hundreds of coffee lovers every morning. If just 2% of them tap this card while waiting for their latte, you will generate 120 new 5-star reviews every month.'",
+    "recommended_offer": "$97 CAD Counter Stand + 14-day AI Auto-reply Trial"
+  }
+]
