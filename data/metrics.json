@@ -1,0 +1,17 @@
+{
+  "market": "Saskatoon, SK",
+  "generated_date": "2026-09-10",
+  "tier1_total_leads": 104,
+  "tier2_total_leads": 106,
+  "total_leads_scraped": 210,
+  "avg_saskatoon_review_count": 150,
+  "avg_saskatoon_star_rating": 4.66,
+  "market_opportunity_mrr_cad": 31290,
+  "zones": {
+    "8th_street_east": 31,
+    "broadway_avenue": 33,
+    "downtown_core": 38,
+    "riversdale_20th_st": 26,
+    "north_industrial_51st": 37
+  }
+}
