@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Customer Review & Experience</title>
+    <!-- Tailwind CDN for mobile styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .star-btn {
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .star-btn:active {
+            transform: scale(0.92);
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
+        }
+        .pulse-subtle {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between p-4 sm:p-6 antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Direct Mode Spinner (Hidden unless direct mode) -->
+    <div id="direct-spinner" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur flex flex-col items-center justify-center p-6 text-center z-50">
+        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <div class="text-sm font-bold text-white">Opening Google Reviews...</div>
+        <p class="text-xs text-slate-400 mt-1">Connecting to official Google Maps review dialog</p>
+    </div>
+
+    <!-- Main Container Card -->
+    <main class="w-full max-w-md mx-auto my-auto py-4">
+        <!-- Header / Business Profile Card -->
+        <div class="bg-slate-800/90 border border-slate-700/80 rounded-3xl p-6 sm:p-7 shadow-2xl backdrop-blur space-y-6">
+            
+            <!-- Merchant Header -->
+            <div class="text-center space-y-2">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-semibold">
+                    <span>📍</span>
+                    <span id="biz-zone">8th Street East, Saskatoon</span>
+                </div>
+                <h1 id="biz-name" class="text-2xl font-extrabold text-white tracking-tight leading-tight">
+                    Arisu Korean BBQ
+                </h1>
+                <p class="text-xs text-slate-400">
+                    We value your feedback. Tap below to share your experience with our team.
+                </p>
+            </div>
+
+            <!-- VIEW 1: Star Rating Selector -->
+            <div id="view-rating" class="space-y-5">
+                <div class="text-center text-xs font-bold text-slate-300 uppercase tracking-wider">
+                    How was your experience today?
+                </div>
+
+                <!-- Star Buttons Grid -->
+                <div class="grid grid-cols-5 gap-2 pt-1">
+                    <button onclick="handleStarClick(1)" class="star-btn flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-700/60 hover:bg-slate-700 border border-slate-600/60 text-center">
+                        <span class="text-2xl">⭐</span>
+                        <span class="text-[10px] font-bold text-slate-400 mt-1.5">1★</span>
+                    </button>
+                    <button onclick="handleStarClick(2)" class="star-btn flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-700/60 hover:bg-slate-700 border border-slate-600/60 text-center">
+                        <span class="text-2xl">⭐</span>
+                        <span class="text-[10px] font-bold text-slate-400 mt-1.5">2★</span>
+                    </button>
+                    <button onclick="handleStarClick(3)" class="star-btn flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-700/60 hover:bg-slate-700 border border-slate-600/60 text-center">
+                        <span class="text-2xl">⭐</span>
+                        <span class="text-[10px] font-bold text-slate-400 mt-1.5">3★</span>
+                    </button>
+                    <button onclick="handleStarClick(4)" class="star-btn flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-center">
+                        <span class="text-2xl">⭐</span>
+                        <span class="text-[10px] font-bold text-blue-400 mt-1.5">4★</span>
+                    </button>
+                    <button onclick="handleStarClick(5)" class="star-btn flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-center pulse-subtle">
+                        <span class="text-2xl">🌟</span>
+                        <span class="text-[10px] font-bold text-amber-400 mt-1.5">5★</span>
+                    </button>
+                </div>
+
+                <div class="flex justify-between text-[11px] text-slate-500 px-1 font-medium">
+                    <span>Needs Improvement</span>
+                    <span>Loved it!</span>
+                </div>
+            </div>
+
+            <!-- VIEW 2: 4-5 Star Google Redirect State -->
+            <div id="view-positive" class="hidden text-center space-y-4 py-4">
+                <div class="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-3xl mx-auto">
+                    🎉
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-lg font-bold text-white">Thank you so much!</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
+                        Opening official Google Reviews now so you can share your rating with Saskatoon...
+                    </p>
+                </div>
+                
+                <div class="w-full bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                    <div id="redirect-bar" class="bg-emerald-500 h-full w-0 transition-all duration-1000 ease-out"></div>
+                </div>
+
+                <a id="positive-manual-link" href="#" target="_blank" class="inline-block text-xs text-blue-400 hover:underline pt-2">
+                    Click here if not redirected in 3 seconds →
+                </a>
+            </div>
+
+            <!-- VIEW 3: 1-3 Star Private Resolution Form -->
+            <div id="view-negative" class="hidden space-y-4 pt-1">
+                <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-1 text-xs">
+                    <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                        <span>🛡️</span> Private Management Resolution
+                    </div>
+                    <p class="text-slate-300 leading-relaxed text-[11px]">
+                        We aim for a 5-star standard every single day. Please tell our management team what happened so we can personally make this right.
+                    </p>
+                </div>
+
+                <form id="private-feedback-form" onsubmit="handlePrivateFeedbackSubmit(event)" class="space-y-3 text-xs">
+                    <div>
+                        <label class="block text-slate-400 font-semibold mb-1">Your Name (Optional)</label>
+                        <input type="text" id="feedback-name" placeholder="e.g. Alex" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 font-semibold mb-1">Phone or Email (For Management Follow-up)</label>
+                        <input type="text" id="feedback-contact" required placeholder="e.g. 306-555-0199 or name@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 font-semibold mb-1">What went wrong?</label>
+                        <textarea id="feedback-msg" required rows="3" placeholder="Tell us how we can improve..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition">
+                        📩 Submit Directly to General Manager (Private)
+                    </button>
+                </form>
+            </div>
+
+            <!-- VIEW 4: Negative Feedback Sent Confirmation -->
+            <div id="view-submitted" class="hidden text-center space-y-3 py-4">
+                <div class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-2xl mx-auto">
+                    ✓
+                </div>
+                <h3 class="text-base font-bold text-white">Feedback Delivered Privately</h3>
+                <p class="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
+                    Your remarks have been dispatched directly to management. Thank you for giving our local team the opportunity to resolve this.
+                </p>
+                <div class="pt-2">
+                    <button onclick="window.close()" class="text-xs text-slate-400 hover:text-slate-200 underline">
+                        Close window
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Compliance & Direct Google Review Footer Link -->
+        <div class="text-center mt-6 space-y-2">
+            <a id="compliance-bypass-link" href="#" target="_blank" class="text-[11px] text-slate-500 hover:text-slate-400 underline transition">
+                Or continue directly to public Google reviews →
+            </a>
+            <div class="text-[10px] text-slate-600">
+                Powered by YXE Local Business Reputation Platform • Saskatoon, SK
+            </div>
+        </div>
+    </main>
+
+    <!-- Client-Side Routing & Logic -->
+    <script>
+        // Preset leads database for instant lookup by ID
+        const PRESET_LEADS = {
+            't2_001': {
+                name: 'Arisu Korean BBQ',
+                zone: '8th Street East, Saskatoon',
+                placeid: 'ChIJ3V8eYnTYBFMR8o9V29xZ1-E',
+                phone: '306-954-8888'
+            },
+            't2_002': {
+                name: 'Broadway Heritage Barber',
+                zone: 'Broadway Avenue, Nutana',
+                placeid: 'ChIJ4455YnTYBFMR8o9V29xZ1-B',
+                phone: '306-652-1234'
+            },
+            't1_001': {
+                name: 'Saskatoon Smile Dental',
+                zone: '8th Street East, Saskatoon',
+                placeid: 'ChIJ7788YnTYBFMR8o9V29xZ1-C',
+                phone: '306-955-4422'
+            },
+            't1_002': {
+                name: 'Prairie Shine Auto Detailing',
+                zone: 'North Industrial, Saskatoon',
+                placeid: 'ChIJ9988YnTYBFMR8o9V29xZ1-D',
+                phone: '306-244-8899'
+            }
+        };
+
+        // URL Parameters Extraction
+        const params = new URLSearchParams(window.location.search);
+        const leadId = params.get('id') || 't2_001';
+        const mode = params.get('mode') || 'shield'; // 'shield' or 'direct'
+        const customName = params.get('name');
+        const customZone = params.get('zone');
+        const customPlaceId = params.get('placeid');
+        const customPhone = params.get('phone');
+
+        // Resolve active business metadata
+        const preset = PRESET_LEADS[leadId] || PRESET_LEADS['t2_001'];
+        const bizName = customName || preset.name;
+        const bizZone = customZone || preset.zone;
+        const placeId = customPlaceId || preset.placeid;
+        const bizPhone = customPhone || preset.phone;
+
+        // Construct standard Google write-review URL
+        const googleReviewUrl = 'https://search.google.com/local/writereview?placeid=' + placeId;
+
+        // Initialize UI Elements
+        document.getElementById('biz-name').innerText = bizName;
+        document.getElementById('biz-zone').innerText = bizZone;
+        document.getElementById('compliance-bypass-link').href = googleReviewUrl;
+        document.getElementById('positive-manual-link').href = googleReviewUrl;
+
+        // Direct Mode Handling (zero click pass-through)
+        if (mode === 'direct') {
+            document.getElementById('direct-spinner').classList.remove('hidden');
+            setTimeout(() => {
+                window.location.replace(googleReviewUrl);
+            }, 50);
+        }
+
+        // Star Click Flow (Sentiment Shield)
+        function handleStarClick(rating) {
+            if (rating >= 4) {
+                // Positive 4-5 Stars Flow
+                document.getElementById('view-rating').classList.add('hidden');
+                document.getElementById('view-positive').classList.remove('hidden');
+
+                // Animate progress bar
+                setTimeout(() => {
+                    const bar = document.getElementById('redirect-bar');
+                    if (bar) bar.style.width = '100%';
+                }, 50);
+
+                // Auto-redirect to Google Reviews after 1.2s
+                setTimeout(() => {
+                    window.location.href = googleReviewUrl;
+                }, 1200);
+
+            } else {
+                // Negative 1-3 Stars Shield Flow
+                document.getElementById('view-rating').classList.add('hidden');
+                document.getElementById('view-negative').classList.remove('hidden');
+            }
+        }
+
+        // Private Feedback Submission (100% Free - SMS or Storage)
+        function handlePrivateFeedbackSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('feedback-name').value.trim() || 'Customer';
+            const contact = document.getElementById('feedback-contact').value.trim();
+            const msg = document.getElementById('feedback-msg').value.trim();
+
+            const feedbackPayload = {
+                id: Date.now(),
+                business: bizName,
+                name: name,
+                contact: contact,
+                message: msg,
+                timestamp: new Date().toISOString()
+            };
+
+            // 1. Save locally in browser
+            const existing = JSON.parse(localStorage.getItem('yxe_customer_feedbacks') || '[]');
+            existing.unshift(feedbackPayload);
+            localStorage.setItem('yxe_customer_feedbacks', JSON.stringify(existing.slice(0, 20)));
+
+            // 2. Dispatch SMS alert if on mobile phone
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile && bizPhone) {
+                const cleanPhone = bizPhone.replace(/[^0-9]/g, '');
+                const smsBody = encodeURIComponent('[Private Feedback for ' + bizName + ']\nFrom: ' + name + ' (' + contact + ')\nMessage: ' + msg);
+                // Optional SMS prompt link trigger
+                setTimeout(() => {
+                    window.location.href = 'sms:' + cleanPhone + '?body=' + smsBody;
+                }, 600);
+            }
+
+            // 3. Show confirmation view
+            document.getElementById('view-negative').classList.add('hidden');
+            document.getElementById('view-submitted').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
