@@ -475,7 +475,7 @@
                     </div>
                     <h4 class="text-base font-extrabold text-primary">The 30-Day "15 Reviews or We Pay You" Promise</h4>
                     <p class="text-xs text-secondary leading-relaxed">
-                        <em>"If this smart stand sits on your counter for 30 days and doesn't get you at least 15 verified new Google reviews, we refund 100% of your $97 on the spot, let you keep the hardware for free, and buy you a $50 gift card to a local Saskatoon restaurant for wasting your time."</em>
+                        <em>"If this smart stand sits on your counter for 30 days and doesn't get you at least 15 verified new Google reviews, we refund your full $50 on the spot, let you keep the hardware for free, and buy you a $50 gift card to a local Saskatoon restaurant for wasting your time."</em>
                     </p>
                 </div>
 
@@ -574,154 +574,318 @@
         </section>
 
         <!-- ============================================================== -->
-        <!-- TAB 5: AI LOCAL SEO REVIEWS -->
+        <!-- TAB 5: PRACTICAL AI LOCAL SEO REVIEW RESPONDER -->
         <!-- ============================================================== -->
         <section id="view-ai-replies" class="tab-view hidden space-y-6">
             <!-- Section Guide Banner -->
             <div class="bg-surface border border-theme rounded-2xl p-4 shadow-sm flex items-start gap-3">
                 <div class="w-8 h-8 rounded-xl badge-accent flex items-center justify-center font-bold text-sm shrink-0">🤖</div>
-                <div>
-                    <h2 class="text-sm font-bold text-primary">Section Purpose &amp; Action Guide</h2>
-                    <p class="text-xs text-secondary mt-0.5">
-                        Test our automated AI review reply engine. Shows how natural language processing injects Saskatoon geographic tokens and signature services into Google responses to elevate Local Pack rankings.
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h2 class="text-sm font-bold text-primary">Managed AI Review Reply Engine (Operational Tool)</h2>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">Client Retainer Workflow</span>
+                    </div>
+                    <p class="text-xs text-secondary mt-1 leading-relaxed">
+                        Generate professional, Google-compliant replies that naturally inject Saskatoon neighborhood corridors, signature services, and sentiment empathy. Used daily to service Tier 2 ($49/mo) and Tier 1 ($149/mo) review management clients.
                     </p>
                 </div>
             </div>
 
+            <!-- Client Selector & Business Knowledge Card -->
+            <div class="bg-surface border border-theme rounded-2xl p-5 shadow-sm space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-muted">1. Select or Configure Client</h3>
+                        <p class="text-[11px] text-secondary">Pick any lead from your Saskatoon CRM database or edit their profile details below.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-semibold text-secondary">Select Client:</label>
+                        <select id="ai-client-select" onchange="onAIClientSelected(this.value)" class="bg-subtle border border-theme rounded-xl px-3 py-1.5 text-xs font-semibold text-primary focus:outline-none max-w-xs">
+                            <!-- Populated dynamically from allLeads -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Client Profile Form (Editable + LocalStorage Persisted) -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs pt-2 border-t border-theme">
+                    <div>
+                        <label class="block font-semibold text-secondary mb-1">Business Name</label>
+                        <input type="text" id="ai-biz-name" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary font-medium focus:outline-none" placeholder="e.g. Arisu Korean BBQ">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-secondary mb-1">Corridor / Neighborhood</label>
+                        <input type="text" id="ai-biz-corridor" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary font-medium focus:outline-none" placeholder="e.g. 8th Street East, Saskatoon">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-secondary mb-1">Signature Services / Specialties</label>
+                        <input type="text" id="ai-biz-services" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary font-medium focus:outline-none" placeholder="e.g. Korean fried chicken, tabletop BBQ, bibimbap">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-secondary mb-1">Google Review / GBP Link</label>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="ai-biz-url" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary font-medium focus:outline-none" placeholder="https://search.google.com/...">
+                            <button onclick="saveCurrentClientProfile()" title="Save custom profile to storage" class="px-3 py-2 btn-accent rounded-xl text-xs font-bold whitespace-nowrap shadow">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Columns: Review Input Form vs Generated Output -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Input Form -->
-                <div class="bg-surface border border-theme rounded-2xl p-6 space-y-4 shadow-sm">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Customer Review Simulator</h3>
-                    
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div>
-                            <label class="block font-semibold text-secondary mb-1">Target Business</label>
-                            <select id="ai-biz-select" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
-                                <option value="arisu">Arisu Korean BBQ (8th St)</option>
-                                <option value="broadway">Broadway Heritage Barber</option>
-                                <option value="prairie">Prairie Shine Auto Detailing</option>
-                            </select>
+                <!-- Left: Review Input & Modes -->
+                <div class="bg-surface border border-theme rounded-2xl p-6 space-y-4 shadow-sm flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">2. Paste Customer Review</h3>
+                            <div class="flex gap-2">
+                                <button id="btn-mode-single" onclick="setAIReplyMode('single')" class="px-2.5 py-1 text-[11px] font-bold rounded-lg btn-accent shadow">Single</button>
+                                <button id="btn-mode-batch" onclick="setAIReplyMode('batch')" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-subtle border border-theme text-secondary hover:text-primary">Batch (Up to 5)</button>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block font-semibold text-secondary mb-1">Star Rating</label>
-                            <select id="ai-star-select" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
-                                <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
-                                <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
-                                <option value="3">⭐⭐⭐ (3 Stars)</option>
-                                <option value="1">⭐ (1 Star)</option>
-                            </select>
+
+                        <!-- Single Review Fields -->
+                        <div id="ai-single-form" class="space-y-3">
+                            <div class="grid grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-secondary mb-1">Reviewer Name</label>
+                                    <input type="text" id="ai-reviewer-name" value="Jessica Miller" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-secondary mb-1">Star Rating</label>
+                                    <select id="ai-star-select" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none font-semibold">
+                                        <option value="5">⭐⭐⭐⭐⭐ (5 Stars - Enthusiastic)</option>
+                                        <option value="4">⭐⭐⭐⭐ (4 Stars - Constructive)</option>
+                                        <option value="3">⭐⭐⭐ (3 Stars - Neutral / Room for Growth)</option>
+                                        <option value="2">⭐⭐ (2 Stars - Critical)</option>
+                                        <option value="1">⭐ (1 Star - Urgent De-escalation)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="text-xs">
+                                <label class="block font-semibold text-secondary mb-1">Customer Review Text</label>
+                                <textarea id="ai-review-content" rows="4" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none text-xs leading-relaxed" placeholder="Paste the customer's actual Google review here...">Best dinner in Saskatoon! The Korean fried chicken was crispy and delicious, and the staff were so kind and prompt.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Batch Mode Fields (Hidden by default) -->
+                        <div id="ai-batch-form" class="hidden space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <label class="font-semibold text-secondary">Paste Reviews (Format: Name | Stars | Text)</label>
+                                <span class="text-[10px] text-muted">Example: Sarah | 5 | Great haircut!</span>
+                            </div>
+                            <textarea id="ai-batch-input" rows="6" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none font-mono text-[11px]" placeholder="Jessica | 5 | Loved the crispy chicken and great service!&#10;David | 4 | Great food, was just a bit busy on Friday night.&#10;Ashley | 1 | Waited 20 minutes for our table even with reservation."></textarea>
                         </div>
                     </div>
 
-                    <div class="text-xs">
-                        <label class="block font-semibold text-secondary mb-1">Reviewer Name</label>
-                        <input type="text" id="ai-reviewer-name" value="Jessica Miller" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
-                    </div>
-
-                    <div class="text-xs">
-                        <label class="block font-semibold text-secondary mb-1">Review Content</label>
-                        <textarea id="ai-review-content" rows="3" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">Best dinner in Saskatoon! The Korean fried chicken was crispy and delicious.</textarea>
-                    </div>
-
-                    <button onclick="generateAIReviewReply()" class="w-full py-3 btn-accent font-bold text-xs rounded-xl shadow transition">
-                        ⚡ Generate SEO-Injected Reply
+                    <button onclick="executeGenerateReply()" class="w-full py-3 btn-accent font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2">
+                        <span>⚡</span>
+                        <span id="btn-generate-label">Generate SEO-Injected Reply</span>
                     </button>
                 </div>
 
-                <!-- Response Box -->
+                <!-- Right: Generated Output Card -->
                 <div class="bg-surface border border-theme rounded-2xl p-6 space-y-4 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Generated NLP Response</h3>
-                            <span class="text-[11px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded">SEO Injected</span>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">3. Ready-to-Post Google Reply</h3>
+                            <span id="ai-reply-status-tag" class="text-[11px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded">
+                                Optimized &amp; Ready
+                            </span>
                         </div>
                         
-                        <div id="ai-reply-output" class="p-4 bg-subtle border border-theme rounded-xl text-xs leading-relaxed text-primary font-medium">
-                            Hi Jessica, thank you so much for the 5-star review! Our team at Arisu Korean BBQ takes huge pride in serving the best crispy Korean fried chicken and stone bowl bibimbap here on 8th Street East in Saskatoon. We look forward to welcoming you back again soon!
+                        <!-- Reply Text Output Container -->
+                        <div id="ai-reply-output" class="p-4 bg-subtle border border-theme rounded-xl text-xs leading-relaxed text-primary font-medium min-h-[120px] whitespace-pre-line select-all">Hi Jessica, thank you so much for the 5-star review! Our team at Arisu Korean BBQ takes immense pride in preparing crispy Korean fried chicken and tabletop BBQ right here on 8th Street East in Saskatoon. We love hearing that our staff made your dinner special, and we look forward to welcoming you back soon!</div>
+
+                        <!-- Stats & Metadata bar -->
+                        <div class="flex items-center justify-between mt-3 text-[11px] text-secondary">
+                            <div class="flex items-center gap-2">
+                                <span>Character count:</span>
+                                <strong id="ai-reply-charcount" class="font-mono text-primary">276 / 4,096</strong>
+                            </div>
+                            <div class="text-muted">
+                                Google TOS: Compliant (No keyword stuffing)
+                            </div>
                         </div>
 
-                        <div class="mt-4 p-3 bg-subtle border border-theme rounded-xl text-xs space-y-1">
-                            <div class="font-bold text-muted text-[11px]">NLP Entities Injected:</div>
+                        <!-- NLP Entities Injected -->
+                        <div class="mt-3 p-3 bg-subtle border border-theme rounded-xl text-xs space-y-1">
+                            <div class="font-bold text-muted text-[11px]">Rank Factors Injected:</div>
                             <div class="flex flex-wrap gap-1.5 mt-1" id="nlp-entity-chips">
                                 <span class="px-2 py-0.5 badge-accent rounded text-[11px]">Saskatoon</span>
                                 <span class="px-2 py-0.5 badge-accent rounded text-[11px]">8th Street East</span>
                                 <span class="px-2 py-0.5 badge-accent rounded text-[11px]">crispy Korean fried chicken</span>
+                                <span class="px-2 py-0.5 badge-accent rounded text-[11px]">tabletop BBQ</span>
                             </div>
                         </div>
                     </div>
 
-                    <button onclick="copyGeneratedReply()" class="w-full py-2.5 bg-subtle hover:bg-slate-200 dark:hover:bg-slate-700 border border-theme font-semibold text-primary rounded-xl text-xs transition">
-                        📋 Copy Response to Clipboard
-                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="copyGeneratedReply()" class="flex-1 py-2.5 bg-subtle hover:bg-slate-200 dark:hover:bg-slate-700 border border-theme font-semibold text-primary rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+                            <span>📋</span> Copy Reply to Clipboard
+                        </button>
+                        <button onclick="saveReplyToLog()" class="px-4 py-2.5 btn-accent rounded-xl text-xs font-bold shadow" title="Save to client history">
+                            💾 Save to Log
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reply History Log for Selected Client -->
+            <div class="bg-surface border border-theme rounded-2xl p-5 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Client Reply History Log</h3>
+                        <p class="text-[11px] text-secondary">Past generated responses saved for this client in local storage.</p>
+                    </div>
+                    <button onclick="clearClientReplyLog()" class="text-[11px] text-muted hover:text-red-500 transition">Clear Log</button>
+                </div>
+                <div id="ai-replies-history-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                    <!-- Populated dynamically from localStorage -->
                 </div>
             </div>
         </section>
 
         <!-- ============================================================== -->
-        <!-- TAB 6: GEO SCHEMA STUDIO & LLM AUDIT -->
+        <!-- TAB 6: PRACTICAL GEO SCHEMA STUDIO & LLM READINESS CHECKLIST -->
         <!-- ============================================================== -->
         <section id="view-geo-studio" class="tab-view hidden space-y-6">
             <!-- Section Guide Banner -->
             <div class="bg-surface border border-theme rounded-2xl p-4 shadow-sm flex items-start gap-3">
                 <div class="w-8 h-8 rounded-xl badge-accent flex items-center justify-center font-bold text-sm shrink-0">🧠</div>
-                <div>
-                    <h2 class="text-sm font-bold text-primary">Section Purpose &amp; Action Guide</h2>
-                    <p class="text-xs text-secondary mt-0.5">
-                        Generative Engine Optimization (GEO). Generates Schema.org JSON-LD scripts to embed on client websites so ChatGPT Search, Perplexity, and Gemini can cite their business with 100% structured certainty.
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h2 class="text-sm font-bold text-primary">Generative Engine Optimization (GEO) &amp; LLM Audit System</h2>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 border border-blue-500/20">AI Search Ready</span>
+                    </div>
+                    <p class="text-xs text-secondary mt-1 leading-relaxed">
+                        ChatGPT Search, Perplexity, and Google Gemini cite businesses based on structured Schema.org JSON-LD data and verified local citations. Generate copy-paste Schema code for client websites and execute the 10-point GEO readiness protocol.
                     </p>
                 </div>
             </div>
 
+            <!-- Client Picker Bar for GEO Studio -->
+            <div class="bg-surface border border-theme rounded-2xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Active GEO Target Client</h3>
+                    <p class="text-[11px] text-secondary">Select a business to configure Schema metadata and track their 10-point AI readiness checklist.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-semibold text-secondary">Target Business:</label>
+                    <select id="geo-client-select" onchange="onGEOClientSelected(this.value)" class="bg-subtle border border-theme rounded-xl px-3 py-1.5 text-xs font-semibold text-primary focus:outline-none max-w-xs">
+                        <!-- Populated dynamically from allLeads -->
+                    </select>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Schema Generator -->
-                <div class="bg-surface border border-theme rounded-2xl p-6 space-y-4 shadow-sm">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Schema.org JSON-LD Generator</h3>
-                        <button onclick="copySchema()" class="text-xs text-blue-600 font-bold hover:underline">Copy Script</button>
+                <!-- Left Panel: Interactive Schema.org JSON-LD Generator -->
+                <div class="bg-surface border border-theme rounded-2xl p-6 space-y-4 shadow-sm flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Schema.org JSON-LD Generator</h3>
+                                <p class="text-[11px] text-secondary">Generates exact script to paste into client's website &lt;head&gt;.</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="https://search.google.com/test/rich-results" target="_blank" class="text-xs text-blue-600 hover:underline font-semibold">Test on Google ↗</a>
+                                <button onclick="copySchema()" class="px-2.5 py-1 btn-accent rounded-lg text-xs font-bold shadow">📋 Copy Code</button>
+                            </div>
+                        </div>
+
+                        <!-- Editable Fields Grid -->
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Business Name</label>
+                                <input type="text" id="geo-name" value="Arisu Korean BBQ" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none font-medium">
+                            </div>
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Schema Type</label>
+                                <select id="geo-type" onchange="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none font-semibold">
+                                    <option value="Restaurant">Restaurant / Dining</option>
+                                    <option value="Dentist">Dentist / Dental Practice</option>
+                                    <option value="BeautySalon">Beauty Salon / Aesthetics</option>
+                                    <option value="BarberShop">Barbershop</option>
+                                    <option value="AutoRepair">Auto Repair / Detailing</option>
+                                    <option value="HealthAndBeautyBusiness">Health &amp; Wellness</option>
+                                    <option value="ProfessionalService">Professional / Home Trades</option>
+                                    <option value="LocalBusiness">General LocalBusiness</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Street Address</label>
+                                <input type="text" id="geo-street" value="1505 8th St E" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Postal Code (Saskatoon, SK)</label>
+                                <input type="text" id="geo-postal" value="S7H 0W5" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Phone Number</label>
+                                <input type="text" id="geo-phone" value="306-954-8888" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Website URL</label>
+                                <input type="text" id="geo-url" value="https://arisukoreanbbq.ca" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Star Rating (0-5)</label>
+                                <input type="number" step="0.1" id="geo-rating" value="4.8" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-secondary block font-semibold mb-1">Total Review Count</label>
+                                <input type="number" id="geo-review-count" value="285" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-xl p-2 text-primary focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Generated Code Preview -->
+                        <div class="relative">
+                            <div class="text-[11px] font-mono text-muted mb-1 flex items-center justify-between">
+                                <span>&lt;script type="application/ld+json"&gt;</span>
+                                <span class="text-emerald-500 font-bold">✓ Valid JSON-LD</span>
+                            </div>
+                            <pre id="schema-code-block" class="p-4 bg-subtle border border-theme rounded-xl text-[11px] text-emerald-600 dark:text-emerald-400 font-mono overflow-x-auto max-h-56 select-all"></pre>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div>
-                            <label class="text-secondary block mb-1">Business</label>
-                            <input type="text" id="geo-name" value="Arisu Korean BBQ" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-lg p-2 text-primary">
-                        </div>
-                        <div>
-                            <label class="text-secondary block mb-1">Category</label>
-                            <input type="text" id="geo-type" value="Restaurant" oninput="updateSchemaPreview()" class="w-full bg-subtle border border-theme rounded-lg p-2 text-primary">
-                        </div>
-                    </div>
-
-                    <pre id="schema-code-block" class="p-4 bg-subtle border border-theme rounded-xl text-[11px] text-emerald-600 dark:text-emerald-400 font-mono overflow-x-auto max-h-72 select-all">
-                    </pre>
+                    <button onclick="copySchema()" class="w-full py-2.5 bg-subtle hover:bg-slate-200 dark:hover:bg-slate-700 border border-theme font-semibold text-primary rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+                        <span>📋</span> Copy Full &lt;script&gt; Block for Client Website
+                    </button>
                 </div>
 
-                <!-- LLM Recommendation Audit Scorecard -->
-                <div class="bg-surface border border-theme rounded-2xl p-6 space-y-4 shadow-sm">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-muted">AI Crawler Readiness Scorecard</h3>
-                    
-                    <div class="flex items-center gap-4 p-4 bg-subtle rounded-xl border border-theme">
-                        <div class="w-14 h-14 rounded-full bg-emerald-500/10 border-2 border-emerald-500 flex items-center justify-center text-xl font-black text-emerald-600">
-                            92
+                <!-- Right Panel: Per-Client GEO Readiness Action Checklist -->
+                <div class="bg-surface border border-theme rounded-2xl p-6 space-y-4 shadow-sm flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-muted">10-Point Per-Client GEO Checklist</h3>
+                                <p class="text-[11px] text-secondary">Track actual implementation progress for this specific client.</p>
+                            </div>
+                            <div class="text-right">
+                                <span id="geo-progress-badge" class="text-xs font-extrabold text-blue-600 px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded">
+                                    0 / 10 (0%)
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <div class="text-sm font-bold text-primary">High AI Recommendation Authority</div>
-                            <div class="text-xs text-muted mt-0.5">Optimized for GPTBot, PerplexityBot, and Google Knowledge Graph.</div>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full h-2 bg-subtle rounded-full overflow-hidden border border-theme">
+                            <div id="geo-progress-bar" class="h-full bg-blue-600 transition-all duration-300" style="width: 0%;"></div>
+                        </div>
+
+                        <!-- 10 Action Checklist Items -->
+                        <div id="geo-checklist-container" class="space-y-2 text-xs">
+                            <!-- Populated dynamically via renderGEOClientChecklist() -->
                         </div>
                     </div>
 
-                    <div class="space-y-2 text-xs">
-                        <div class="flex items-center gap-2 text-emerald-600">
-                            <span>✓</span> Structured PostalAddress in Saskatoon confirmed
-                        </div>
-                        <div class="flex items-center gap-2 text-emerald-600">
-                            <span>✓</span> AggregateRating entity linked (4.8 stars / 285 reviews)
-                        </div>
-                        <div class="flex items-center gap-2 text-emerald-600">
-                            <span>✓</span> GeoCoordinates pin aligned on 8th Street East
-                        </div>
-                        <div class="flex items-center gap-2 text-amber-600">
-                            <span>!</span> Recommendation: Build 3 more organic citation mentions on r/saskatoon
-                        </div>
+                    <div class="p-3 bg-subtle border border-theme rounded-xl text-[11px] text-secondary flex items-start gap-2">
+                        <span class="text-blue-600 font-bold text-sm">💡</span>
+                        <span>
+                            <strong>Why this works:</strong> Modern LLMs index web entities by matching structured Schema data with high-authority local forum mentions (Reddit, Bing Places, and Google Knowledge Graph). Checking all 10 items ensures ChatGPT, Perplexity, and Gemini recommend this business.
+                        </span>
                     </div>
                 </div>
             </div>
@@ -897,7 +1061,7 @@
             { id: 5, title: 'Execute 10 in-person walk-ins during off-peak hours (10-11:30 AM)', phase: 'Phase 3: Sales Blitz', done: false },
             { id: 6, title: 'Deliver 14-day zero-risk hardware pilot or $97 direct sale', phase: 'Phase 3: Sales Blitz', done: false },
             { id: 7, title: 'Attach laminated 7-word staff ask cheat-sheet to cash register', phase: 'Phase 4: Onboarding', done: false },
-            { id: 8, title: 'Day 7 check-in: Show collected reviews & pitch $149/mo AI SEO responder', phase: 'Phase 5: Continuity', done: false },
+            { id: 8, title: 'Day 7 check-in: Show collected reviews & pitch $49/mo AI Replies (T2) or $149/mo (T1)', phase: 'Phase 5: Continuity', done: false },
             { id: 9, title: 'Embed Schema.org JSON-LD & build r/saskatoon citations for GEO', phase: 'Phase 6: Scaling', done: false },
         ];
 
@@ -932,6 +1096,12 @@
             renderLeadsTable();
             renderRoadmap();
             renderCorridorBreakdown();
+            populateClientDropdowns();
+            if (allLeads.length > 0) {
+                const defaultLeadId = allLeads[0].id;
+                onAIClientSelected(defaultLeadId);
+                onGEOClientSelected(defaultLeadId);
+            }
         }
 
         // Render Real Metrics in Command Center
@@ -946,11 +1116,17 @@
                 const avgRating = (allLeads.reduce((acc, l) => acc + l.est_rating, 0) / allLeads.length).toFixed(2);
                 document.getElementById('kpi-avg-reviews').innerText = avgReviews;
                 document.getElementById('kpi-avg-rating').innerText = avgRating + ' ⭐';
-                document.getElementById('kpi-mrr-potential').innerText = '$' + (allLeads.length * 149).toLocaleString() + ' CAD';
+                // Tier-aware MRR: T1 @ $149/mo, T2 @ $49/mo
+                const addressableMRR = (tier1Leads.length * 149) + (tier2Leads.length * 49);
+                document.getElementById('kpi-mrr-potential').innerText = '$' + addressableMRR.toLocaleString() + ' CAD';
             }
 
-            const activePilots = allLeads.filter(l => l.status === '14-Day Drop Placed' || l.status === 'Closed Paid Retainer').length;
-            document.getElementById('kpi-active-pilots').innerText = activePilots + ' Active';
+            const closedT1 = allLeads.filter(l => l.status === 'Closed T1 Retainer').length;
+            const closedT2 = allLeads.filter(l => l.status === 'Closed T2 Retainer' || l.status === 'Closed Paid Retainer').length;
+            const activePilots = allLeads.filter(l => l.status === '14-Day Drop Placed').length;
+            const closedLabel = (closedT1 + closedT2) > 0 ? `${closedT1 + closedT2} Clients / ${activePilots} Pilots` : `${activePilots} Active`;
+            document.getElementById('kpi-active-pilots').innerText = closedLabel;
+
         }
 
         function renderCorridorBreakdown() {
@@ -1008,7 +1184,7 @@
                     </div>
                     <div>• <strong>Approach:</strong> Dress business smart-casual (blazer/collared shirt). Address the <em>Office Manager / Practice Coordinator</em> directly.</div>
                     <div>• <strong>Core Hook:</strong> <em>"A single cosmetic patient / roofing job is worth $3,000+. Our system shields you from emotional 1-star reviews privately while capturing verified 5-star patient proof before they leave."</em></div>
-                    <div>• <strong>Pricing Pitch:</strong> Offer the 14-day zero-risk practice pilot $\\to$ close on $149–$297/mo reputation retainer.</div>
+                    <div>• <strong>Pricing Pitch:</strong> $50 door-opener bundle (Stand + Sentiment Shield) $\\to$ close on $149/mo Managed AI Replies & Reputation Retainer.</div>
                 `;
             } else {
                 banner.className = 'p-4 rounded-xl text-xs space-y-1.5 leading-relaxed bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200';
@@ -1018,7 +1194,7 @@
                     </div>
                     <div>• <strong>Timing is Critical:</strong> Visit strictly between 10:00–11:15 AM or 2:00–3:30 PM (never during lunch/dinner rushes).</div>
                     <div>• <strong>Core Hook:</strong> 3-second live tap demo: <em>"Have the owner unlock their phone, tap your card. 'That took 1 second. You serve 300 guests a day who forget to review. Put this by your Moneris terminal and staff asks 7 words.'"</em></div>
-                    <div>• <strong>Pricing Pitch:</strong> $97 cash/card on the spot or 14-day free counter drop.</div>
+                    <div>• <strong>Pricing Pitch:</strong> $50 bundle (NFC Stand + Sentiment Shield included) on the spot $\\to$ pitch $49/mo Managed AI Review Replies during same visit.</div>
                 `;
             }
         }
@@ -1064,7 +1240,8 @@
                         <select onchange="updateLeadStatus('${lead.id}', this.value)" class="bg-subtle border border-theme text-primary text-[11px] font-semibold rounded-lg px-2 py-1 focus:outline-none">
                             <option value="Not Contacted" ${lead.status === 'Not Contacted' ? 'selected' : ''}>⚪ Not Contacted</option>
                             <option value="14-Day Drop Placed" ${lead.status === '14-Day Drop Placed' ? 'selected' : ''}>🟡 14-Day Drop Placed</option>
-                            <option value="Closed Paid Retainer" ${lead.status === 'Closed Paid Retainer' ? 'selected' : ''}>🟢 Closed Paid ($149/mo)</option>
+                            <option value="Closed T2 Retainer" ${(lead.status === 'Closed T2 Retainer' || (lead.tier === 2 && lead.status === 'Closed Paid Retainer')) ? 'selected' : ''}>🟢 Closed T2 ($49/mo)</option>
+                            <option value="Closed T1 Retainer" ${(lead.status === 'Closed T1 Retainer' || (lead.tier === 1 && lead.status === 'Closed Paid Retainer')) ? 'selected' : ''}>💎 Closed T1 ($149/mo)</option>
                             <option value="Follow Up Required" ${lead.status === 'Follow Up Required' ? 'selected' : ''}>🔵 Follow Up Required</option>
                         </select>
                     </td>
@@ -1082,7 +1259,8 @@
         }
 
         function getStatusBadge(status) {
-            if (status === 'Closed Paid Retainer') return 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+            if (status === 'Closed T1 Retainer') return 'bg-purple-500/10 text-purple-600 border border-purple-500/20';
+            if (status === 'Closed T2 Retainer' || status === 'Closed Paid Retainer') return 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
             if (status === '14-Day Drop Placed') return 'bg-amber-500/10 text-amber-600 border border-amber-500/20';
             if (status === 'Follow Up Required') return 'bg-blue-500/10 text-blue-600 border border-blue-500/20';
             return 'bg-slate-500/10 text-slate-500 border border-slate-500/20';
@@ -1148,82 +1326,523 @@
             switchTab('funnel-sim');
         }
 
-        // AI Review Reply Generation
-        function generateAIReviewReply() {
-            const biz = document.getElementById('ai-biz-select').value;
-            const stars = document.getElementById('ai-star-select').value;
-            const reviewer = document.getElementById('ai-reviewer-name').value;
-            const content = document.getElementById('ai-review-content').value;
+        // ==============================================================
+        // CLIENT PICKER & PROFILE MANAGEMENT
+        // ==============================================================
+        let activeAIReplyMode = 'single';
+        let currentAIClientId = '';
+        let currentGEOClientId = '';
 
-            let reply = '';
-            let entities = [];
+        function populateClientDropdowns() {
+            const aiSelect = document.getElementById('ai-client-select');
+            const geoSelect = document.getElementById('geo-client-select');
+            if (!aiSelect || !geoSelect) return;
 
-            if (stars >= 4) {
-                if (biz === 'arisu') {
-                    reply = `Hi ${reviewer}, thank you so much for the 5-star review! Our team at Arisu Korean BBQ takes huge pride in serving the best crispy Korean fried chicken and stone bowl bibimbap here on 8th Street East in Saskatoon. We look forward to welcoming you back again soon!`;
-                    entities = ['Saskatoon', '8th Street East', 'crispy Korean fried chicken', 'bibimbap'];
-                } else if (biz === 'broadway') {
-                    reply = `Thanks ${reviewer}! We love having you at Broadway Heritage Barbershop. Keeping our Nutana and Broadway community looking sharp with clean skin fades and beard trims is what we love doing. See you next cut!`;
-                    entities = ['Broadway Avenue', 'Nutana', 'clean skin fades', 'Saskatoon barber'];
-                } else {
-                    reply = `Hi ${reviewer}, we truly appreciate your business! Our team at Prairie Shine Detailing in Saskatoon takes pride in delivering flawless ceramic coatings and paint correction. Drive safe!`;
-                    entities = ['Saskatoon', 'North Industrial', 'ceramic coatings'];
-                }
-            } else {
-                reply = `Dear ${reviewer}, thank you for bringing this to our attention. Providing an exceptional experience is our top priority in Saskatoon, and we regret that your visit fell short of our standard. Please reach out to our General Manager directly at feedback@yxeagency.ca so we can resolve this personally.`;
-                entities = ['Saskatoon', 'management resolution'];
+            aiSelect.innerHTML = '';
+            geoSelect.innerHTML = '';
+
+            allLeads.forEach(l => {
+                const opt1 = document.createElement('option');
+                opt1.value = l.id;
+                opt1.textContent = `${l.name} (${l.zone})`;
+                aiSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = l.id;
+                opt2.textContent = `${l.name} (${l.zone})`;
+                geoSelect.appendChild(opt2);
+            });
+
+            // Add custom option
+            const customOpt1 = document.createElement('option');
+            customOpt1.value = 'custom';
+            customOpt1.textContent = '➕ Custom Business Profile';
+            aiSelect.appendChild(customOpt1);
+
+            const customOpt2 = document.createElement('option');
+            customOpt2.value = 'custom';
+            customOpt2.textContent = '➕ Custom Business Profile';
+            geoSelect.appendChild(customOpt2);
+        }
+
+        function getClientProfile(leadId) {
+            const storedProfiles = JSON.parse(localStorage.getItem('yxe_client_profiles') || '{}');
+            if (storedProfiles[leadId]) {
+                return storedProfiles[leadId];
             }
 
-            document.getElementById('ai-reply-output').innerText = reply;
+            const lead = allLeads.find(l => l.id === leadId);
+            if (!lead) {
+                return {
+                    name: 'Arisu Korean BBQ',
+                    corridor: '8th Street East, Saskatoon',
+                    services: 'Korean fried chicken, tabletop BBQ, stone bowl bibimbap',
+                    url: 'https://search.google.com/local/writereview?placeid=ChIJ3V8eYnTYBFMR8o9V29xZ1-E',
+                    type: 'Restaurant',
+                    street: '1505 8th St E',
+                    postal: 'S7H 0W5',
+                    phone: '306-954-8888',
+                    rating: '4.8',
+                    reviewCount: '285'
+                };
+            }
 
-            const chipsContainer = document.getElementById('nlp-entity-chips');
-            chipsContainer.innerHTML = '';
-            entities.forEach(e => {
-                chipsContainer.innerHTML += `<span class="px-2 py-0.5 badge-accent rounded text-[11px]">${e}</span>`;
-            });
+            // Generate smart default services from category & name
+            let services = 'exceptional customer service, high quality results';
+            let schemaType = 'LocalBusiness';
+            const cat = lead.category.toLowerCase();
+            if (cat.includes('barber')) {
+                services = 'precision skin fades, beard shaping, hot towel shaves';
+                schemaType = 'BarberShop';
+            } else if (cat.includes('dental')) {
+                services = 'gentle family dentistry, cosmetic whitening, dental implants';
+                schemaType = 'Dentist';
+            } else if (cat.includes('korean') || cat.includes('restaurant') || cat.includes('dining') || cat.includes('pub') || cat.includes('cafe') || cat.includes('bakery')) {
+                services = 'signature dine-in dishes, takeout, fresh authentic ingredients';
+                schemaType = 'Restaurant';
+            } else if (cat.includes('aesthetics') || cat.includes('spa') || cat.includes('salon') || cat.includes('laser')) {
+                services = 'medical aesthetics, laser rejuvenation, hydrafacials, skin therapy';
+                schemaType = 'BeautySalon';
+            } else if (cat.includes('detail') || cat.includes('auto') || cat.includes('mechanic') || cat.includes('tire') || cat.includes('body shop')) {
+                services = 'ceramic coating, multi-stage paint correction, interior detailing';
+                schemaType = 'AutoRepair';
+            } else if (cat.includes('fitness') || cat.includes('gym') || cat.includes('crossfit') || cat.includes('training')) {
+                services = 'strength conditioning, personal training, small group classes';
+                schemaType = 'HealthAndBeautyBusiness';
+            } else if (cat.includes('roofing') || cat.includes('plumb') || cat.includes('electric') || cat.includes('hvac') || cat.includes('contractor')) {
+                services = 'residential installations, emergency repairs, warranty-backed craftsmanship';
+                schemaType = 'ProfessionalService';
+            }
+
+            // Postal code heuristic
+            let postal = 'S7H 0W5';
+            if (lead.zone.includes('Broadway')) postal = 'S7N 1A7';
+            else if (lead.zone.includes('Downtown')) postal = 'S7K 1N4';
+            else if (lead.zone.includes('Riversdale')) postal = 'S7M 1A5';
+            else if (lead.zone.includes('Industrial')) postal = 'S7K 5X7';
+
+            return {
+                name: lead.name,
+                corridor: `${lead.zone}, Saskatoon`,
+                services: services,
+                url: `https://search.google.com/local/writereview?placeid=${lead.id}`,
+                type: schemaType,
+                street: lead.address,
+                postal: postal,
+                phone: lead.phone || '306-555-0100',
+                rating: lead.est_rating.toString(),
+                reviewCount: lead.review_count.toString()
+            };
+        }
+
+        function saveCurrentClientProfile() {
+            const leadId = currentAIClientId || (allLeads[0] ? allLeads[0].id : 'custom');
+            const storedProfiles = JSON.parse(localStorage.getItem('yxe_client_profiles') || '{}');
+            
+            storedProfiles[leadId] = {
+                name: document.getElementById('ai-biz-name').value,
+                corridor: document.getElementById('ai-biz-corridor').value,
+                services: document.getElementById('ai-biz-services').value,
+                url: document.getElementById('ai-biz-url').value,
+                type: document.getElementById('geo-type') ? document.getElementById('geo-type').value : 'LocalBusiness',
+                street: document.getElementById('geo-street') ? document.getElementById('geo-street').value : '',
+                postal: document.getElementById('geo-postal') ? document.getElementById('geo-postal').value : 'S7K 1N4',
+                phone: document.getElementById('geo-phone') ? document.getElementById('geo-phone').value : '',
+                rating: document.getElementById('geo-rating') ? document.getElementById('geo-rating').value : '4.8',
+                reviewCount: document.getElementById('geo-review-count') ? document.getElementById('geo-review-count').value : '150'
+            };
+
+            localStorage.setItem('yxe_client_profiles', JSON.stringify(storedProfiles));
+            alert('Client business profile saved to local storage!');
+        }
+
+        // ==============================================================
+        // TAB 5: AI REVIEW REPLY RESPONDER (REAL OPERATIONAL ENGINE)
+        // ==============================================================
+        function onAIClientSelected(leadId) {
+            currentAIClientId = leadId;
+            const profile = getClientProfile(leadId);
+            document.getElementById('ai-biz-name').value = profile.name;
+            document.getElementById('ai-biz-corridor').value = profile.corridor;
+            document.getElementById('ai-biz-services').value = profile.services;
+            document.getElementById('ai-biz-url').value = profile.url;
+
+            // Also keep GEO select aligned if desired
+            const geoSelect = document.getElementById('geo-client-select');
+            if (geoSelect && geoSelect.value !== leadId) {
+                geoSelect.value = leadId;
+                onGEOClientSelected(leadId);
+            }
+
+            renderClientReplyHistory(leadId);
+            executeGenerateReply();
+        }
+
+        function setAIReplyMode(mode) {
+            activeAIReplyMode = mode;
+            const btnSingle = document.getElementById('btn-mode-single');
+            const btnBatch = document.getElementById('btn-mode-batch');
+            const singleForm = document.getElementById('ai-single-form');
+            const batchForm = document.getElementById('ai-batch-form');
+            const label = document.getElementById('btn-generate-label');
+
+            if (mode === 'single') {
+                btnSingle.className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg btn-accent shadow';
+                btnBatch.className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg bg-subtle border border-theme text-secondary hover:text-primary';
+                singleForm.classList.remove('hidden');
+                batchForm.classList.add('hidden');
+                label.innerText = 'Generate SEO-Injected Reply';
+            } else {
+                btnBatch.className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg btn-accent shadow';
+                btnSingle.className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg bg-subtle border border-theme text-secondary hover:text-primary';
+                batchForm.classList.remove('hidden');
+                singleForm.classList.add('hidden');
+                label.innerText = 'Generate Batch Replies';
+            }
+        }
+
+        function executeGenerateReply() {
+            const bizName = document.getElementById('ai-biz-name').value.trim() || 'Our Team';
+            const corridor = document.getElementById('ai-biz-corridor').value.trim() || 'Saskatoon';
+            const servicesStr = document.getElementById('ai-biz-services').value.trim();
+            const serviceList = servicesStr ? servicesStr.split(',').map(s => s.trim()).filter(Boolean) : ['our services'];
+            const randomService = serviceList[Math.floor(Math.random() * serviceList.length)] || 'our craft';
+            const primaryService = serviceList[0] || 'our signature offerings';
+
+            if (activeAIReplyMode === 'single') {
+                const reviewer = document.getElementById('ai-reviewer-name').value.trim() || 'Valued Guest';
+                const stars = parseInt(document.getElementById('ai-star-select').value, 10);
+                const reviewText = document.getElementById('ai-review-content').value.trim();
+
+                const replyObj = buildStructuredAIReply(reviewer, stars, reviewText, bizName, corridor, primaryService, randomService);
+                
+                document.getElementById('ai-reply-output').innerText = replyObj.reply;
+                document.getElementById('ai-reply-charcount').innerText = `${replyObj.reply.length} / 4,096`;
+                
+                const chips = document.getElementById('nlp-entity-chips');
+                chips.innerHTML = '';
+                replyObj.entities.forEach(e => {
+                    chips.innerHTML += `<span class="px-2 py-0.5 badge-accent rounded text-[11px]">${e}</span>`;
+                });
+            } else {
+                // Batch Mode
+                const rawBatch = document.getElementById('ai-batch-input').value.trim();
+                if (!rawBatch) {
+                    alert('Please enter at least one review in the batch box.');
+                    return;
+                }
+
+                const lines = rawBatch.split('\n').filter(l => l.trim().length > 0);
+                let combinedOutput = '';
+                let allInjectedEntities = new Set(['Saskatoon', corridor]);
+
+                lines.forEach((line, idx) => {
+                    let reviewer = `Guest ${idx + 1}`;
+                    let stars = 5;
+                    let text = line;
+
+                    if (line.includes('|')) {
+                        const parts = line.split('|').map(p => p.trim());
+                        if (parts.length >= 3) {
+                            reviewer = parts[0];
+                            stars = parseInt(parts[1], 10) || 5;
+                            text = parts.slice(2).join('|');
+                        } else if (parts.length === 2) {
+                            reviewer = parts[0];
+                            text = parts[1];
+                        }
+                    }
+
+                    const subReply = buildStructuredAIReply(reviewer, stars, text, bizName, corridor, primaryService, randomService);
+                    combinedOutput += `--- [Reply ${idx + 1}] for ${reviewer} (${stars}★) ---\n${subReply.reply}\n\n`;
+                    subReply.entities.forEach(e => allInjectedEntities.add(e));
+                });
+
+                document.getElementById('ai-reply-output').innerText = combinedOutput.trim();
+                document.getElementById('ai-reply-charcount').innerText = `${combinedOutput.length} / 4,096`;
+                
+                const chips = document.getElementById('nlp-entity-chips');
+                chips.innerHTML = '';
+                Array.from(allInjectedEntities).slice(0, 6).forEach(e => {
+                    chips.innerHTML += `<span class="px-2 py-0.5 badge-accent rounded text-[11px]">${e}</span>`;
+                });
+            }
+        }
+
+        function buildStructuredAIReply(reviewer, stars, reviewText, bizName, corridor, primaryService, randomService) {
+            let reply = '';
+            let entities = ['Saskatoon'];
+
+            if (corridor && !corridor.toLowerCase().includes('saskatoon')) {
+                entities.push(corridor);
+            } else if (corridor) {
+                entities.push(corridor.split(',')[0].trim());
+            }
+
+            const cleanReview = reviewText.toLowerCase();
+
+            if (stars === 5) {
+                entities.push(primaryService);
+                if (randomService !== primaryService) entities.push(randomService);
+
+                if (cleanReview.includes('staff') || cleanReview.includes('service') || cleanReview.includes('friendly') || cleanReview.includes('kind')) {
+                    reply = `Hi ${reviewer}, thank you so much for the 5-star review! Our team at ${bizName} here on ${corridor} takes huge pride in providing welcoming, genuine service and delivering top-tier ${primaryService}. It means the world to our local crew to hear your visit went so smoothly. We look forward to welcoming you back again soon!`;
+                } else if (cleanReview.includes('food') || cleanReview.includes('dinner') || cleanReview.includes('lunch') || cleanReview.includes('crispy') || cleanReview.includes('delicious')) {
+                    reply = `Hi ${reviewer}, thank you for the wonderful 5-star rating! Everyone at ${bizName} is passionate about serving fresh, memorable meals right here on ${corridor} in Saskatoon. We are thrilled that you loved the ${primaryService} and our culinary craft. Can't wait to host you again!`;
+                } else {
+                    reply = `Hi ${reviewer}, thank you so much for taking the time to leave us 5 stars! The whole team at ${bizName} in ${corridor} is dedicated to delivering the finest ${primaryService} in Saskatoon. We truly value your support as a local customer and look forward to seeing you again soon!`;
+                }
+            } else if (stars === 4) {
+                entities.push(primaryService);
+                reply = `Hello ${reviewer}, thank you very much for the 4-star review! Our team at ${bizName} on ${corridor} is delighted that you had a positive experience with our ${primaryService}. We are constantly refining our operations to earn that 5th star on every visit here in Saskatoon. If there is anything specific we can do to make your next visit extraordinary, please let our team know!`;
+            } else if (stars === 3) {
+                entities.push('direct management review');
+                reply = `Dear ${reviewer}, thank you for taking the time to share your feedback. At ${bizName} on ${corridor}, we strive to deliver an exceptional experience with every ${primaryService} we provide in Saskatoon. We appreciate your honest perspective and would love the chance to learn more about how we can improve. Please feel free to reach out to our management team directly so we can ensure your next visit is 5 stars.`;
+            } else {
+                // 1 or 2 Stars - Urgent professional de-escalation
+                entities.push('customer satisfaction team');
+                reply = `Dear ${reviewer}, thank you for bringing this to our attention. Delivering dependable, high-quality ${primaryService} is the cornerstone of ${bizName} in ${corridor}, and we are genuinely sorry to hear that your recent experience fell short of that commitment. We take your remarks seriously and want to make this right. Please contact our leadership directly at management@yxeautomation.ca or call us directly so we can personally resolve this for you.`;
+            }
+
+            return { reply, entities };
         }
 
         function copyGeneratedReply() {
             const text = document.getElementById('ai-reply-output').innerText;
-            navigator.clipboard.writeText(text);
-            alert('Reply copied to clipboard!');
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                const tag = document.getElementById('ai-reply-status-tag');
+                const orig = tag.innerText;
+                tag.innerText = '✓ Copied to Clipboard!';
+                tag.className = 'text-[11px] font-semibold px-2 py-0.5 bg-emerald-500 text-white rounded';
+                setTimeout(() => {
+                    tag.innerText = orig;
+                    tag.className = 'text-[11px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded';
+                }, 2000);
+            });
         }
 
-        // Schema JSON Preview
+        function saveReplyToLog() {
+            const text = document.getElementById('ai-reply-output').innerText;
+            if (!text) return;
+
+            const clientId = currentAIClientId || 'general';
+            const logsKey = 'yxe_reply_logs_' + clientId;
+            const existingLogs = JSON.parse(localStorage.getItem(logsKey) || '[]');
+
+            const reviewer = document.getElementById('ai-reviewer-name').value || 'Guest';
+            const stars = document.getElementById('ai-star-select').value || '5';
+
+            existingLogs.unshift({
+                date: new Date().toLocaleDateString('en-CA', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                reviewer: reviewer,
+                stars: stars,
+                snippet: text.length > 90 ? text.substring(0, 90) + '...' : text,
+                fullText: text
+            });
+
+            // Keep max 10
+            localStorage.setItem(logsKey, JSON.stringify(existingLogs.slice(0, 10)));
+            renderClientReplyHistory(clientId);
+            alert('Saved to client reply log!');
+        }
+
+        function renderClientReplyHistory(clientId) {
+            const container = document.getElementById('ai-replies-history-list');
+            if (!container) return;
+
+            const logsKey = 'yxe_reply_logs_' + (clientId || 'general');
+            const logs = JSON.parse(localStorage.getItem(logsKey) || '[]');
+
+            if (logs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-xs text-muted p-4 text-center bg-subtle rounded-xl border border-theme">
+                        No saved replies for this client yet. Click <strong>"💾 Save to Log"</strong> after generating a reply to store it here.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            logs.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'p-3 bg-subtle border border-theme rounded-xl flex items-center justify-between text-xs gap-3';
+                el.innerHTML = `
+                    <div class="space-y-0.5 flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-primary">${item.reviewer}</span>
+                            <span class="text-amber-500 font-semibold">${item.stars} ⭐</span>
+                            <span class="text-[10px] text-muted">${item.date}</span>
+                        </div>
+                        <p class="text-[11px] text-secondary truncate">${item.snippet}</p>
+                    </div>
+                    <button onclick="copyHistoricReply('${logsKey}', ${index})" class="px-2.5 py-1 bg-surface hover:bg-slate-200 dark:hover:bg-slate-700 border border-theme rounded-lg text-[11px] font-bold text-primary shrink-0 transition">
+                        Copy
+                    </button>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function copyHistoricReply(key, index) {
+            const logs = JSON.parse(localStorage.getItem(key) || '[]');
+            if (logs[index] && logs[index].fullText) {
+                navigator.clipboard.writeText(logs[index].fullText).then(() => {
+                    alert('Historic reply copied to clipboard!');
+                });
+            }
+        }
+
+        function clearClientReplyLog() {
+            const clientId = currentAIClientId || 'general';
+            if (confirm('Clear saved reply history for this client?')) {
+                localStorage.removeItem('yxe_reply_logs_' + clientId);
+                renderClientReplyHistory(clientId);
+            }
+        }
+
+        // ==============================================================
+        // TAB 6: PRACTICAL GEO SCHEMA STUDIO & LLM AUDIT
+        // ==============================================================
+        const GEO_CHECKLIST_TEMPLATE = [
+            { id: 'geo_1', title: 'Schema.org JSON-LD embedded in website <head>', linkText: 'Google Rich Results Test', linkUrl: 'https://search.google.com/test/rich-results' },
+            { id: 'geo_2', title: 'Google Business Profile: 100% profile information complete', linkText: 'Google Business', linkUrl: 'https://business.google.com' },
+            { id: 'geo_3', title: 'GBP Services catalog filled with keyword-rich descriptions', linkText: 'Edit Services', linkUrl: 'https://business.google.com' },
+            { id: 'geo_4', title: 'GBP Visuals: min 10 high-resolution photos (exterior, interior, staff)', linkText: 'Upload Photos', linkUrl: 'https://business.google.com' },
+            { id: 'geo_5', title: 'At least 3 authentic mentions & recommendations on r/saskatoon', linkText: 'Open Reddit Scanner', isAction: true },
+            { id: 'geo_6', title: 'Website Homepage mentions "Saskatoon" + neighbourhood in H1/H2', linkText: 'SEO Check', linkUrl: 'https://pagespeed.web.dev' },
+            { id: 'geo_7', title: 'NAP (Name, Address, Phone) consistency matched across web citations', linkText: 'Google Maps Search', linkUrl: 'https://maps.google.com' },
+            { id: 'geo_8', title: 'Google Business Profile Q&A: 3 customer FAQs seeded & answered', linkText: 'Manage Q&A', linkUrl: 'https://business.google.com' },
+            { id: 'geo_9', title: 'Website has Reviews page or embedded Google review proof widget', linkText: 'Test Shield Funnel', isShield: true },
+            { id: 'geo_10', title: 'Bing Places for Business claimed (powers Microsoft Copilot & Bing AI)', linkText: 'Bing Places', linkUrl: 'https://www.bingplaces.com' }
+        ];
+
+        function onGEOClientSelected(leadId) {
+            currentGEOClientId = leadId;
+            const profile = getClientProfile(leadId);
+
+            document.getElementById('geo-name').value = profile.name;
+            document.getElementById('geo-type').value = profile.type;
+            document.getElementById('geo-street').value = profile.street;
+            document.getElementById('geo-postal').value = profile.postal;
+            document.getElementById('geo-phone').value = profile.phone;
+            document.getElementById('geo-url').value = profile.url;
+            document.getElementById('geo-rating').value = profile.rating;
+            document.getElementById('geo-review-count').value = profile.reviewCount;
+
+            updateSchemaPreview();
+            renderGEOClientChecklist(leadId);
+        }
+
         function updateSchemaPreview() {
-            const name = document.getElementById('geo-name').value;
+            const name = document.getElementById('geo-name').value.trim() || 'Local Business';
             const type = document.getElementById('geo-type').value;
+            const street = document.getElementById('geo-street').value.trim() || '100 8th St E';
+            const postal = document.getElementById('geo-postal').value.trim() || 'S7H 0W5';
+            const phone = document.getElementById('geo-phone').value.trim() || '306-555-0100';
+            const url = document.getElementById('geo-url').value.trim() || 'https://example.com';
+            const rating = document.getElementById('geo-rating').value.trim() || '4.8';
+            const reviewCount = document.getElementById('geo-review-count').value.trim() || '150';
 
             const schema = {
                 "@context": "https://schema.org",
                 "@type": type,
                 "name": name,
+                "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
+                "@id": url,
+                "url": url,
+                "telephone": phone,
+                "priceRange": "$$",
                 "address": {
                     "@type": "PostalAddress",
-                    "streetAddress": "1505 8th St E",
+                    "streetAddress": street,
                     "addressLocality": "Saskatoon",
                     "addressRegion": "SK",
-                    "postalCode": "S7H 0W5",
+                    "postalCode": postal,
                     "addressCountry": "CA"
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.1158,
-                    "longitude": -106.6341
+                    "latitude": 52.1332,
+                    "longitude": -106.6700
                 },
                 "aggregateRating": {
                     "@type": "AggregateRating",
-                    "ratingValue": "4.8",
-                    "reviewCount": "285"
-                }
+                    "ratingValue": rating,
+                    "reviewCount": reviewCount,
+                    "bestRating": "5",
+                    "worstRating": "1"
+                },
+                "areaServed": [
+                    {
+                        "@type": "City",
+                        "name": "Saskatoon"
+                    }
+                ]
             };
-            document.getElementById('schema-code-block').innerText = JSON.stringify(schema, null, 2);
+
+            const fullScript = `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
+            const block = document.getElementById('schema-code-block');
+            if (block) block.innerText = fullScript;
         }
 
         function copySchema() {
             const text = document.getElementById('schema-code-block').innerText;
-            navigator.clipboard.writeText(text);
-            alert('Schema.org JSON-LD copied to clipboard!');
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Schema.org JSON-LD script copied! Paste this inside your client\'s website <head> tag.');
+            });
+        }
+
+        function renderGEOClientChecklist(leadId) {
+            const container = document.getElementById('geo-checklist-container');
+            if (!container) return;
+
+            const storageKey = 'yxe_geo_checklist_' + (leadId || 'general');
+            const savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+            container.innerHTML = '';
+            let completedCount = 0;
+
+            GEO_CHECKLIST_TEMPLATE.forEach(item => {
+                const isChecked = !!savedState[item.id];
+                if (isChecked) completedCount++;
+
+                let actionHtml = '';
+                if (item.isAction) {
+                    actionHtml = `<button onclick="switchTab('reddit-scanner')" class="text-[10px] text-blue-600 hover:underline font-semibold shrink-0">Open Reddit Scanner ↗</button>`;
+                } else if (item.isShield) {
+                    actionHtml = `<button onclick="switchTab('funnel-sim')" class="text-[10px] text-blue-600 hover:underline font-semibold shrink-0">Test Shield Funnel ↗</button>`;
+                } else if (item.linkUrl) {
+                    actionHtml = `<a href="${item.linkUrl}" target="_blank" class="text-[10px] text-blue-600 hover:underline font-semibold shrink-0">${item.linkText} ↗</a>`;
+                }
+
+                const row = document.createElement('div');
+                row.className = 'p-2.5 bg-subtle border border-theme rounded-xl flex items-center justify-between gap-2';
+                row.innerHTML = `
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleGEOChecklistItem('${leadId}', '${item.id}', this.checked)" class="accent-blue-600 rounded cursor-pointer w-3.5 h-3.5 shrink-0">
+                        <span class="${isChecked ? 'line-through text-muted' : 'text-primary'} text-xs font-medium truncate">${item.title}</span>
+                    </div>
+                    ${actionHtml}
+                `;
+                container.appendChild(row);
+            });
+
+            const total = GEO_CHECKLIST_TEMPLATE.length;
+            const pct = Math.round((completedCount / total) * 100);
+            
+            const badge = document.getElementById('geo-progress-badge');
+            const bar = document.getElementById('geo-progress-bar');
+            if (badge) badge.innerText = `${completedCount} / ${total} (${pct}%)`;
+            if (bar) bar.style.width = pct + '%';
+        }
+
+        function toggleGEOChecklistItem(leadId, itemId, isChecked) {
+            const storageKey = 'yxe_geo_checklist_' + (leadId || 'general');
+            const savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            savedState[itemId] = isChecked;
+            localStorage.setItem(storageKey, JSON.stringify(savedState));
+            renderGEOClientChecklist(leadId);
         }
 
         // Reddit Scanner
