@@ -186,6 +186,9 @@
             <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active px-3 py-1.5 rounded-lg font-semibold transition border border-transparent flex items-center gap-1.5">
                 📊 Command Center
             </button>
+            <button onclick="switchTab('client-admin')" id="tab-client-admin" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition border border-transparent text-secondary hover:text-primary flex items-center gap-1.5">
+                🏢 Client CRM (<span id="tab-client-count" class="font-bold text-emerald-600">3</span>)
+            </button>
             <button onclick="switchTab('leads')" id="tab-leads" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition border border-transparent text-secondary hover:text-primary flex items-center gap-1.5">
                 🎯 Saskatoon Leads (<span id="tab-lead-count">210</span>)
             </button>
@@ -193,7 +196,7 @@
                 💼 90s Walk-In Pitch &amp; ROI
             </button>
             <button onclick="switchTab('funnel-sim')" id="tab-funnel-sim" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition border border-transparent text-secondary hover:text-primary flex items-center gap-1.5">
-                🛡️ Sentiment Shield Simulator
+                🛡️ NFC Programmer &amp; Shield
             </button>
             <button onclick="switchTab('ai-replies')" id="tab-ai-replies" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition border border-transparent text-secondary hover:text-primary flex items-center gap-1.5">
                 🤖 AI Review SEO Responder
@@ -320,7 +323,103 @@
         </section>
 
         <!-- ============================================================== -->
-        <!-- TAB 2: 210 SASKATOON LEADS & CRM -->
+        <!-- TAB 2: CLIENT ADMIN CRM & STORE CONTROL PANELS -->
+        <!-- ============================================================== -->
+        <section id="view-client-admin" class="tab-view hidden space-y-6">
+            <!-- Section Guide Banner -->
+            <div class="bg-surface border border-theme rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-xl badge-accent flex items-center justify-center font-bold text-sm shrink-0">🏢</div>
+                    <div>
+                        <h2 class="text-sm font-bold text-primary">Client Admin Panel &amp; Merchant Control Center</h2>
+                        <p class="text-xs text-secondary mt-0.5">
+                            Manage onboarded Saskatoon clients. Track review trajectories, customer NFC taps, subscription billing status ($49/mo &amp; $149/mo retainers), and generate 1-click monthly ROI progress reports.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openAddClientModal()" class="px-3.5 py-1.5 btn-accent text-xs font-bold rounded-xl shadow transition flex items-center gap-1.5">
+                        <span>➕</span> Add New Client Store
+                    </button>
+                    <button onclick="exportClientsJSON()" class="px-2.5 py-1.5 bg-subtle border border-theme text-primary hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1" title="Download CRM database JSON">
+                        <span>📥</span> Export JSON
+                    </button>
+                    <button onclick="triggerClientJSONImport()" class="px-2.5 py-1.5 bg-subtle border border-theme text-primary hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1" title="Restore CRM database from file">
+                        <span>📤</span> Import
+                    </button>
+                    <input type="file" id="client-import-input" accept=".json" class="hidden" onchange="handleClientJSONImport(event)">
+                </div>
+            </div>
+
+            <!-- Client Telemetry Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-surface border border-theme rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-semibold text-muted uppercase tracking-wider">Active Client Stores</div>
+                    <div class="text-3xl font-extrabold text-primary mt-2" id="kpi-client-active-count">3 Active</div>
+                    <div class="text-xs text-secondary mt-2 flex items-center gap-1" id="kpi-client-pilots-count">
+                        2 Subscriptions • 1 Due
+                    </div>
+                </div>
+
+                <div class="bg-surface border border-theme rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-semibold text-muted uppercase tracking-wider">Realized Retainer MRR</div>
+                    <div class="text-3xl font-extrabold text-emerald-600 mt-2" id="kpi-client-mrr">$198 CAD/mo</div>
+                    <div class="text-xs text-secondary mt-2" id="kpi-client-setup-rev">
+                        +$150 CAD hardware setup fees collected
+                    </div>
+                </div>
+
+                <div class="bg-surface border border-theme rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-semibold text-muted uppercase tracking-wider">Hardware Deployed</div>
+                    <div class="text-3xl font-extrabold text-blue-600 mt-2" id="kpi-client-hardware">6 Stands / Cards</div>
+                    <div class="text-xs text-secondary mt-2">
+                        Active in 8th St &amp; Broadway
+                    </div>
+                </div>
+
+                <div class="bg-surface border border-theme rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-semibold text-muted uppercase tracking-wider">Reviews Gained / Shielded</div>
+                    <div class="text-3xl font-extrabold text-amber-500 mt-2" id="kpi-client-reviews-gained">+51 Reviews</div>
+                    <div class="text-xs text-secondary mt-2" id="kpi-client-intercepts">
+                        🛡️ 13 bad reviews caught privately
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter & Search Toolbar -->
+            <div class="bg-surface border border-theme rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <input type="text" id="client-search-input" oninput="renderClientAdmin()" placeholder="Search store name, contact, phone..." class="bg-subtle border border-theme text-primary rounded-xl px-3 py-1.5 text-xs focus:outline-none w-full sm:w-64">
+                    
+                    <select id="client-plan-filter" onchange="renderClientAdmin()" class="bg-subtle border border-theme text-primary rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+                        <option value="all">All Plans</option>
+                        <option value="t1_growth">💎 Tier 1 ($149/mo)</option>
+                        <option value="t2_managed">🟢 Tier 2 ($49/mo)</option>
+                        <option value="hardware_only">⚪ Hardware Only ($50)</option>
+                        <option value="pilot">🟡 14-Day Pilot ($0)</option>
+                    </select>
+
+                    <select id="client-status-filter" onchange="renderClientAdmin()" class="bg-subtle border border-theme text-primary rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+                        <option value="all">All Billing Statuses</option>
+                        <option value="paid">Paid 🟢</option>
+                        <option value="due">Payment Due 🟡</option>
+                        <option value="trial">14-Day Pilot ⚪</option>
+                        <option value="overdue">Overdue 🔴</option>
+                    </select>
+                </div>
+                <div class="text-xs text-muted font-medium">
+                    Showing <strong class="text-primary" id="client-visible-count">3</strong> stores
+                </div>
+            </div>
+
+            <!-- Client Stores Dossier Grid -->
+            <div id="clients-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Injected dynamically by JS -->
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 3: 210 SASKATOON LEADS & CRM -->
         <!-- ============================================================== -->
         <section id="view-leads" class="tab-view hidden space-y-6">
             <!-- Section Guide Banner -->
@@ -1062,6 +1161,175 @@
         YXE Local Reviews &amp; Business Automation Engine • Saskatoon, Saskatchewan • Powered by Hormozi $100M Frameworks
     </footer>
 
+    <!-- ============================================================== -->
+    <!-- MODAL: ADD / EDIT CLIENT STORE -->
+    <!-- ============================================================== -->
+    <div id="client-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-surface border border-theme rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-5">
+            <div class="flex items-center justify-between border-b border-theme pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">🏢</span>
+                    <h3 id="client-modal-title" class="text-base font-extrabold text-primary">Add New Client Store</h3>
+                </div>
+                <button onclick="closeClientModal()" class="w-8 h-8 rounded-full bg-subtle hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-muted text-sm font-bold">✕</button>
+            </div>
+
+            <form id="client-form" onsubmit="saveClientModal(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="modal-client-id">
+                <input type="hidden" id="modal-lead-id">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Business / Store Name *</label>
+                        <input type="text" id="modal-client-name" required placeholder="e.g. Prairie Roots Dental" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary font-semibold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Category *</label>
+                        <input type="text" id="modal-client-category" required placeholder="e.g. Dental Clinic, Barber, Restaurant" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Commercial Corridor *</label>
+                        <select id="modal-client-zone" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary font-semibold focus:outline-none">
+                            <option value="8th Street East">8th Street East</option>
+                            <option value="Broadway Avenue">Broadway / Nutana</option>
+                            <option value="Downtown Core">Downtown Core</option>
+                            <option value="Riversdale">Riversdale (20th St)</option>
+                            <option value="North Industrial">North Industrial / 51st</option>
+                            <option value="Sutherland">Sutherland / Central Ave</option>
+                            <option value="Other Saskatoon">Other Saskatoon Area</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Physical Address</label>
+                        <input type="text" id="modal-client-address" placeholder="e.g. 715 8th St E, Saskatoon, SK" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Contact Person</label>
+                        <input type="text" id="modal-client-contact" placeholder="e.g. Dr. Sarah Chen / Kelly" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Phone Number</label>
+                        <input type="text" id="modal-client-phone" placeholder="e.g. (306) 955-8822" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Email Address</label>
+                        <input type="email" id="modal-client-email" placeholder="e.g. info@client.ca" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-subtle/50 p-3.5 rounded-2xl border border-theme">
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Subscription Plan</label>
+                        <select id="modal-client-plan" class="w-full bg-surface border border-theme rounded-xl px-3 py-2 text-primary font-bold focus:outline-none">
+                            <option value="t1_growth">💎 Tier 1 Growth ($149 CAD/mo)</option>
+                            <option value="t2_managed">🟢 Tier 2 Managed ($49 CAD/mo)</option>
+                            <option value="hardware_only">⚪ Hardware Only ($50 CAD one-time)</option>
+                            <option value="pilot">🟡 14-Day Pilot ($0 CAD)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Billing Status</label>
+                        <select id="modal-client-billing-status" class="w-full bg-surface border border-theme rounded-xl px-3 py-2 text-primary font-bold focus:outline-none">
+                            <option value="paid">Paid 🟢</option>
+                            <option value="due">Payment Due 🟡</option>
+                            <option value="trial">In 14-Day Trial ⚪</option>
+                            <option value="overdue">Overdue 🔴</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Payment Method</label>
+                        <input type="text" id="modal-client-payment-method" placeholder="e.g. Stripe Card / Interac" class="w-full bg-surface border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Baseline Reviews</label>
+                        <input type="number" id="modal-client-baseline" min="0" placeholder="140" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Current Reviews</label>
+                        <input type="number" id="modal-client-reviews" min="0" placeholder="158" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Star Rating</label>
+                        <input type="number" step="0.1" min="1" max="5" id="modal-client-rating" placeholder="4.9" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Shield Intercepts</label>
+                        <input type="number" id="modal-client-intercepts" min="0" placeholder="3" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Hardware Deployed Description</label>
+                        <input type="text" id="modal-client-hardware" placeholder="e.g. 2 Acrylic NFC Stands + 5 Cards" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-secondary mb-1">Alert Phone (for SMS Shield)</label>
+                        <input type="text" id="modal-client-alert-phone" placeholder="e.g. 3069558822" class="w-full bg-subtle border border-theme rounded-xl px-3 py-2 text-primary focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-secondary mb-1">Internal Notes &amp; Placement Location</label>
+                    <textarea id="modal-client-notes" rows="2" placeholder="e.g. Placed stand at checkout counter next to debit machine..." class="w-full bg-subtle border border-theme rounded-xl p-2.5 text-primary focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-3 border-t border-theme">
+                    <button type="button" onclick="closeClientModal()" class="px-4 py-2 bg-subtle border border-theme hover:bg-slate-200 dark:hover:bg-slate-700 text-secondary font-bold rounded-xl transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-5 py-2 btn-accent text-white font-bold rounded-xl shadow transition">
+                        💾 Save Store Details
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: CLIENT PROGRESS REPORT GENERATOR -->
+    <!-- ============================================================== -->
+    <div id="client-report-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-surface border border-theme rounded-3xl max-w-lg w-full shadow-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-theme pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📤</span>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-primary">Monthly Performance ROI Report</h3>
+                        <p class="text-[11px] text-muted" id="report-modal-client-subtitle">Ready to send via WhatsApp, SMS, or Email</p>
+                    </div>
+                </div>
+                <button onclick="closeReportModal()" class="w-8 h-8 rounded-full bg-subtle hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-muted text-sm font-bold">✕</button>
+            </div>
+
+            <div class="bg-subtle p-4 rounded-2xl border border-theme space-y-2">
+                <div class="flex items-center justify-between text-xs text-muted">
+                    <span>Message Preview:</span>
+                    <span class="text-[10px] text-emerald-600 font-bold">Hormozi ROI Format</span>
+                </div>
+                <textarea id="report-message-text" rows="8" readonly class="w-full bg-surface border border-theme rounded-xl p-3 text-xs font-mono text-primary select-all focus:outline-none"></textarea>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                <button onclick="copyReportText()" class="flex-1 py-2.5 btn-accent text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-1.5 text-xs">
+                    <span>📋</span> Copy to Clipboard
+                </button>
+                <a id="report-sms-link" href="#" class="py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-1.5 text-xs">
+                    <span>💬</span> Send SMS / Text
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- EMBEDDED REAL SASKATOON DATA & SCRIPTS -->
     <script>
         // Real Saskatoon Leads Dataset (Fallback & Instant Hydration)
@@ -1069,6 +1337,680 @@
         let tier2Leads = [];
         let allLeads = [];
         let currentTier = 1;
+
+        // ==============================================================
+        // CLIENT ADMIN CRM & STORE CONTROL PANELS DATA ENGINE
+        // ==============================================================
+        const SEED_CLIENTS = [
+            {
+                id: "client_yxe_001",
+                lead_id: "yxe_t1_001",
+                name: "Prairie Roots Dental Clinic",
+                category: "Dental & Aesthetics Clinic",
+                zone: "8th Street East",
+                address: "715 8th St E, Saskatoon, SK",
+                contact_person: "Dr. Sarah Chen / Kelly (Office Mgr)",
+                phone: "(306) 955-8822",
+                email: "info@prairierootsdental.ca",
+                place_id: "ChIJ0001SaskatoonTier1PlaceID",
+                google_maps_url: "https://search.google.com/local/writereview?placeid=ChIJ0001SaskatoonTier1PlaceID",
+                plan: "t1_growth", // $149/mo
+                billing_status: "paid", // paid, due, trial, overdue
+                next_billing_date: "2026-10-01",
+                payment_method: "Stripe Card (Auto)",
+                setup_fee_paid: true,
+                hardware_count: "2 Acrylic NFC Stands + 5 Cards",
+                baseline_reviews: 142,
+                current_reviews: 158,
+                rating: 4.9,
+                scans_recorded: 112,
+                intercepts_shielded: 3,
+                onboarding_date: "2026-09-01",
+                notes: "Stands placed on check-out counter next to debit terminal. Staff trained on 7-word ask script.",
+                alert_phone: "3069558822"
+            },
+            {
+                id: "client_yxe_002",
+                lead_id: "yxe_t2_001",
+                name: "Arisu Korean BBQ & Chicken",
+                category: "Korean Restaurant & Bar",
+                zone: "8th Street East",
+                address: "1505 8th St E, Saskatoon, SK",
+                contact_person: "Jin Park (General Manager)",
+                phone: "(306) 955-4673",
+                email: "jin@arisukoreanbbq.ca",
+                place_id: "ChIJ0001SaskatoonTier2PlaceID",
+                google_maps_url: "https://search.google.com/local/writereview?placeid=ChIJ0001SaskatoonTier2PlaceID",
+                plan: "t2_managed", // $49/mo
+                billing_status: "paid",
+                next_billing_date: "2026-10-05",
+                payment_method: "Stripe Apple Pay",
+                setup_fee_paid: true,
+                hardware_count: "3 Wood Counter Stands + 10 Billfold Cards",
+                baseline_reviews: 184,
+                current_reviews: 219,
+                rating: 4.8,
+                scans_recorded: 285,
+                intercepts_shielded: 8,
+                onboarding_date: "2026-09-08",
+                notes: "Billfold cards given with dinner receipt. 8 negative service complaints caught privately via SMS shield!",
+                alert_phone: "3069554673"
+            },
+            {
+                id: "client_yxe_003",
+                lead_id: "yxe_t2_002",
+                name: "Keo's Kitchen",
+                category: "Thai / Lao Dining",
+                zone: "Broadway Avenue",
+                address: "1013 Broadway Ave, Saskatoon, SK",
+                contact_person: "Souk (Owner)",
+                phone: "(306) 652-2533",
+                email: "info@keoskitchen.ca",
+                place_id: "ChIJ0002SaskatoonTier2PlaceID",
+                google_maps_url: "https://search.google.com/local/writereview?placeid=ChIJ0002SaskatoonTier2PlaceID",
+                plan: "t2_managed", // $49/mo
+                billing_status: "due",
+                next_billing_date: "2026-09-28",
+                payment_method: "Interac E-Transfer",
+                setup_fee_paid: true,
+                hardware_count: "1 Acrylic NFC Counter Stand",
+                baseline_reviews: 260,
+                current_reviews: 279,
+                rating: 4.8,
+                scans_recorded: 144,
+                intercepts_shielded: 2,
+                onboarding_date: "2026-09-12",
+                notes: "Broadway regulars love tapping the stand. Invoice sent for month 2 retainer renewal.",
+                alert_phone: "3066522533"
+            }
+        ];
+
+        let clientsCRM = JSON.parse(localStorage.getItem('yxe_client_stores_crm')) || SEED_CLIENTS;
+
+        function saveClientsCRM() {
+            localStorage.setItem('yxe_client_stores_crm', JSON.stringify(clientsCRM));
+            renderClientAdmin();
+            updateHeaderClientBadge();
+        }
+
+        function updateHeaderClientBadge() {
+            const badge = document.getElementById('tab-client-count');
+            if (badge) {
+                badge.innerText = clientsCRM.length;
+            }
+        }
+
+        function renderClientAdmin() {
+            const grid = document.getElementById('clients-grid');
+            if (!grid) return;
+
+            const search = (document.getElementById('client-search-input')?.value || '').toLowerCase();
+            const planFilter = document.getElementById('client-plan-filter')?.value || 'all';
+            const statusFilter = document.getElementById('client-status-filter')?.value || 'all';
+
+            const filtered = clientsCRM.filter(c => {
+                const matchesSearch = c.name.toLowerCase().includes(search) || 
+                                      (c.contact_person && c.contact_person.toLowerCase().includes(search)) || 
+                                      (c.phone && c.phone.includes(search)) || 
+                                      (c.zone && c.zone.toLowerCase().includes(search));
+                const matchesPlan = planFilter === 'all' || c.plan === planFilter;
+                const matchesStatus = statusFilter === 'all' || c.billing_status === statusFilter;
+                return matchesSearch && matchesPlan && matchesStatus;
+            });
+
+            // Update Telemetry KPIs
+            const activeSubscribers = clientsCRM.filter(c => c.billing_status === 'paid' || c.billing_status === 'due');
+            const pilotClients = clientsCRM.filter(c => c.billing_status === 'trial');
+            
+            let totalMRR = 0;
+            activeSubscribers.forEach(c => {
+                if (c.plan === 't1_growth') totalMRR += 149;
+                else if (c.plan === 't2_managed') totalMRR += 49;
+            });
+
+            const setupCount = clientsCRM.filter(c => c.setup_fee_paid).length;
+            const totalSetupFees = setupCount * 50;
+
+            let totalGained = 0;
+            let totalShielded = 0;
+            clientsCRM.forEach(c => {
+                totalGained += Math.max(0, (c.current_reviews || 0) - (c.baseline_reviews || 0));
+                totalShielded += (c.intercepts_shielded || 0);
+            });
+
+            if (document.getElementById('kpi-client-active-count')) {
+                document.getElementById('kpi-client-active-count').innerText = `${clientsCRM.length} Clients`;
+            }
+            if (document.getElementById('kpi-client-pilots-count')) {
+                document.getElementById('kpi-client-pilots-count').innerText = `${activeSubscribers.length} Paid Subscriptions • ${pilotClients.length} Pilot`;
+            }
+            if (document.getElementById('kpi-client-mrr')) {
+                document.getElementById('kpi-client-mrr').innerText = `$${totalMRR.toLocaleString()} CAD/mo`;
+            }
+            if (document.getElementById('kpi-client-setup-rev')) {
+                document.getElementById('kpi-client-setup-rev').innerText = `+$${totalSetupFees.toLocaleString()} CAD setup fees collected`;
+            }
+            if (document.getElementById('kpi-client-hardware')) {
+                document.getElementById('kpi-client-hardware').innerText = `${clientsCRM.length * 2} Stands / Cards`;
+            }
+            if (document.getElementById('kpi-client-reviews-gained')) {
+                document.getElementById('kpi-client-reviews-gained').innerText = `+${totalGained} Reviews`;
+            }
+            if (document.getElementById('kpi-client-intercepts')) {
+                document.getElementById('kpi-client-intercepts').innerText = `🛡️ ${totalShielded} bad reviews caught privately`;
+            }
+            if (document.getElementById('client-visible-count')) {
+                document.getElementById('client-visible-count').innerText = filtered.length;
+            }
+            updateHeaderClientBadge();
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-1 lg:col-span-2 p-12 text-center bg-surface border border-theme rounded-3xl space-y-3">
+                        <div class="text-4xl">🔍</div>
+                        <h4 class="text-base font-bold text-primary">No Matching Client Stores Found</h4>
+                        <p class="text-xs text-muted">Try adjusting your search query or plan filter, or click "+ Add New Client Store".</p>
+                        <button onclick="openAddClientModal()" class="px-4 py-2 btn-accent font-bold text-xs rounded-xl shadow inline-flex items-center gap-1.5 mt-2">
+                            <span>➕</span> Add New Client Store
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Dynamic base URL for NFC
+            const pathParts = window.location.pathname.split('/');
+            pathParts.pop();
+            const basePath = pathParts.join('/');
+            const cleanPath = basePath.endsWith('/') ? basePath : basePath + '/';
+            const baseUrl = window.location.origin + cleanPath + 'review.html';
+
+            filtered.forEach(client => {
+                const clientNfcUrl = `${baseUrl}?id=${client.id}&mode=shield`;
+                const reviewsGained = Math.max(0, (client.current_reviews || 0) - (client.baseline_reviews || 0));
+
+                let planBadge = '';
+                if (client.plan === 't1_growth') {
+                    planBadge = '<span class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-purple-500/10 text-purple-600 border border-purple-500/20">💎 Tier 1 ($149 CAD/mo)</span>';
+                } else if (client.plan === 't2_managed') {
+                    planBadge = '<span class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">🟢 Tier 2 ($49 CAD/mo)</span>';
+                } else if (client.plan === 'hardware_only') {
+                    planBadge = '<span class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-slate-500/10 text-slate-600 border border-slate-500/20">⚪ Hardware Only ($50)</span>';
+                } else {
+                    planBadge = '<span class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20">🟡 14-Day Pilot ($0)</span>';
+                }
+
+                let statusBadge = '';
+                if (client.billing_status === 'paid') {
+                    statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">🟢 Paid</span>';
+                } else if (client.billing_status === 'due') {
+                    statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20">🟡 Payment Due</span>';
+                } else if (client.billing_status === 'trial') {
+                    statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-500/10 text-blue-600 border border-blue-500/20">⚪ In Pilot</span>';
+                } else {
+                    statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/10 text-rose-600 border border-rose-500/20">🔴 Past Due</span>';
+                }
+
+                const card = document.createElement('div');
+                card.className = "bg-surface border border-theme rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-5 transition-all hover:shadow-md";
+                card.innerHTML = `
+                    <div class="space-y-4">
+                        <!-- Header: Identity & Status -->
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="font-extrabold text-base text-primary">${client.name}</h3>
+                                    ${statusBadge}
+                                </div>
+                                <div class="text-xs text-muted flex items-center gap-2">
+                                    <span>${client.category}</span>
+                                    <span>•</span>
+                                    <span class="font-medium text-secondary">${client.zone}</span>
+                                </div>
+                            </div>
+                            <div class="shrink-0">
+                                ${planBadge}
+                            </div>
+                        </div>
+
+                        <!-- Contact & Location Box -->
+                        <div class="p-3 bg-subtle rounded-2xl border border-theme text-xs space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-muted">Contact:</span>
+                                <strong class="text-primary">${client.contact_person || 'Owner / GM'}</strong>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-muted">Phone:</span>
+                                <a href="tel:${client.phone}" class="text-blue-600 font-bold hover:underline">${client.phone || 'N/A'}</a>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-muted">Address:</span>
+                                <span class="text-secondary truncate max-w-[220px]">${client.address || client.zone}</span>
+                            </div>
+                            ${client.email ? `
+                            <div class="flex items-center justify-between">
+                                <span class="text-muted">Email:</span>
+                                <a href="mailto:${client.email}" class="text-blue-600 hover:underline">${client.email}</a>
+                            </div>` : ''}
+                        </div>
+
+                        <!-- Metrics Cockpit: Reviews, Trajectory, Taps, Intercepts -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                            <div class="p-2.5 bg-subtle border border-theme rounded-xl">
+                                <div class="text-[10px] text-muted uppercase font-semibold">Reviews</div>
+                                <div class="text-base font-extrabold text-primary mt-0.5">${client.current_reviews}</div>
+                                <div class="text-[10px] text-emerald-600 font-bold">+${reviewsGained} gained</div>
+                            </div>
+
+                            <div class="p-2.5 bg-subtle border border-theme rounded-xl">
+                                <div class="text-[10px] text-muted uppercase font-semibold">Star Rating</div>
+                                <div class="text-base font-extrabold text-amber-500 mt-0.5">${client.rating} ⭐</div>
+                                <div class="text-[10px] text-muted">Baseline: ${client.baseline_reviews}</div>
+                            </div>
+
+                            <div class="p-2.5 bg-subtle border border-theme rounded-xl">
+                                <div class="text-[10px] text-muted uppercase font-semibold">NFC Scans</div>
+                                <div class="text-base font-extrabold text-blue-600 mt-0.5">${client.scans_recorded || 0}</div>
+                                <div class="text-[10px] text-muted">In-store taps</div>
+                            </div>
+
+                            <div class="p-2.5 bg-subtle border border-theme rounded-xl">
+                                <div class="text-[10px] text-muted uppercase font-semibold">Shielded</div>
+                                <div class="text-base font-extrabold text-purple-600 mt-0.5">${client.intercepts_shielded || 0}</div>
+                                <div class="text-[10px] text-purple-600 font-bold">1-3★ caught</div>
+                            </div>
+                        </div>
+
+                        <!-- Billing & Hardware Line -->
+                        <div class="text-xs space-y-1 bg-subtle/50 p-2.5 rounded-xl border border-theme">
+                            <div class="flex justify-between items-center text-[11px]">
+                                <span class="text-muted">Hardware:</span>
+                                <strong class="text-primary">${client.hardware_count || '1 NFC Stand'}</strong>
+                            </div>
+                            <div class="flex justify-between items-center text-[11px]">
+                                <span class="text-muted">Next Billing:</span>
+                                <span class="text-secondary font-medium">${client.next_billing_date || 'N/A'} via ${client.payment_method || 'Stripe'}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[11px]">
+                                <span class="text-muted">Setup Fee:</span>
+                                <span class="text-emerald-600 font-bold">${client.setup_fee_paid ? '✅ $50 CAD Paid' : 'Pending'}</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Tag URL for this store -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between items-center text-[11px]">
+                                <span class="font-bold text-secondary">NFC Tag URL for this Store:</span>
+                                <div class="flex gap-2">
+                                    <button onclick="recordClientTap('${client.id}')" title="Simulate +1 in-store customer scan" class="text-[10px] font-bold text-blue-600 hover:underline">
+                                        📱 +1 Tap
+                                    </button>
+                                    <button onclick="recordClientReview('${client.id}')" title="Simulate +1 Google review captured" class="text-[10px] font-bold text-emerald-600 hover:underline">
+                                        ⭐ +1 Review
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5">
+                                <input type="text" readonly value="${clientNfcUrl}" class="flex-1 bg-subtle border border-theme rounded-lg px-2.5 py-1 text-[11px] font-mono text-primary select-all focus:outline-none">
+                                <button onclick="navigator.clipboard.writeText('${clientNfcUrl}').then(() => alert('Store NFC URL copied!'));" class="px-2.5 py-1 btn-accent font-bold text-[11px] rounded-lg shadow whitespace-nowrap">
+                                    Copy
+                                </button>
+                                <a href="${clientNfcUrl}" target="_blank" class="px-2 py-1 bg-subtle border border-theme hover:bg-slate-200 dark:hover:bg-slate-700 text-primary font-bold text-[11px] rounded-lg transition" title="Open live screen in new tab">
+                                    ↗
+                                </a>
+                            </div>
+                        </div>
+
+                        ${client.notes ? `
+                        <div class="text-[11px] text-muted bg-subtle/30 p-2 rounded-lg border border-dashed border-theme">
+                            <strong>Note:</strong> ${client.notes}
+                        </div>` : ''}
+                    </div>
+
+                    <!-- Footer Action Buttons -->
+                    <div class="pt-3 border-t border-theme flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button onclick="openReportModal('${client.id}')" class="px-3 py-1.5 btn-accent text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1">
+                                <span>📤</span> Monthly Report
+                            </button>
+                            <button onclick="openClientInAIReplies('${client.id}')" class="px-2.5 py-1.5 bg-subtle border border-theme hover:bg-slate-200 dark:hover:bg-slate-700 text-primary font-bold text-xs rounded-xl transition flex items-center gap-1">
+                                <span>🤖</span> AI Replies
+                            </button>
+                            <button onclick="openClientInGEOStudio('${client.id}')" class="px-2.5 py-1.5 bg-subtle border border-theme hover:bg-slate-200 dark:hover:bg-slate-700 text-primary font-bold text-xs rounded-xl transition flex items-center gap-1">
+                                <span>🧠</span> GEO Audit
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-1">
+                            <button onclick="openEditClientModal('${client.id}')" class="px-2.5 py-1.5 bg-subtle border border-theme hover:bg-slate-200 dark:hover:bg-slate-700 text-primary font-bold text-xs rounded-xl transition">
+                                📝 Edit
+                            </button>
+                            <button onclick="deleteClient('${client.id}')" class="px-2 py-1.5 bg-subtle border border-theme hover:bg-rose-500/20 text-rose-600 font-bold text-xs rounded-xl transition" title="Delete client">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openAddClientModal() {
+            document.getElementById('client-form').reset();
+            document.getElementById('modal-client-id').value = '';
+            document.getElementById('modal-lead-id').value = '';
+            document.getElementById('client-modal-title').innerText = 'Add New Client Store';
+            document.getElementById('modal-client-plan').value = 't2_managed';
+            document.getElementById('modal-client-billing-status').value = 'paid';
+            document.getElementById('modal-client-rating').value = '4.8';
+            document.getElementById('client-modal').classList.remove('hidden');
+        }
+
+        function openEditClientModal(clientId) {
+            const client = clientsCRM.find(c => c.id === clientId);
+            if (!client) return;
+
+            document.getElementById('modal-client-id').value = client.id;
+            document.getElementById('modal-lead-id').value = client.lead_id || '';
+            document.getElementById('client-modal-title').innerText = `Edit Store Control Panel: ${client.name}`;
+            document.getElementById('modal-client-name').value = client.name || '';
+            document.getElementById('modal-client-category').value = client.category || '';
+            document.getElementById('modal-client-zone').value = client.zone || '8th Street East';
+            document.getElementById('modal-client-address').value = client.address || '';
+            document.getElementById('modal-client-contact').value = client.contact_person || '';
+            document.getElementById('modal-client-phone').value = client.phone || '';
+            document.getElementById('modal-client-email').value = client.email || '';
+            document.getElementById('modal-client-plan').value = client.plan || 't2_managed';
+            document.getElementById('modal-client-billing-status').value = client.billing_status || 'paid';
+            document.getElementById('modal-client-payment-method').value = client.payment_method || 'Stripe Card';
+            document.getElementById('modal-client-baseline').value = client.baseline_reviews || 0;
+            document.getElementById('modal-client-reviews').value = client.current_reviews || 0;
+            document.getElementById('modal-client-rating').value = client.rating || 4.8;
+            document.getElementById('modal-client-intercepts').value = client.intercepts_shielded || 0;
+            document.getElementById('modal-client-hardware').value = client.hardware_count || '';
+            document.getElementById('modal-client-alert-phone').value = client.alert_phone || '';
+            document.getElementById('modal-client-notes').value = client.notes || '';
+
+            document.getElementById('client-modal').classList.remove('hidden');
+        }
+
+        function closeClientModal() {
+            document.getElementById('client-modal').classList.add('hidden');
+        }
+
+        function saveClientModal(event) {
+            event.preventDefault();
+            const id = document.getElementById('modal-client-id').value;
+            const name = document.getElementById('modal-client-name').value.trim();
+            if (!name) return;
+
+            const category = document.getElementById('modal-client-category').value.trim();
+            const zone = document.getElementById('modal-client-zone').value;
+            const address = document.getElementById('modal-client-address').value.trim();
+            const contact = document.getElementById('modal-client-contact').value.trim();
+            const phone = document.getElementById('modal-client-phone').value.trim();
+            const email = document.getElementById('modal-client-email').value.trim();
+            const plan = document.getElementById('modal-client-plan').value;
+            const billingStatus = document.getElementById('modal-client-billing-status').value;
+            const paymentMethod = document.getElementById('modal-client-payment-method').value.trim();
+            const baseline = parseInt(document.getElementById('modal-client-baseline').value) || 0;
+            const current = parseInt(document.getElementById('modal-client-reviews').value) || 0;
+            const rating = parseFloat(document.getElementById('modal-client-rating').value) || 4.8;
+            const intercepts = parseInt(document.getElementById('modal-client-intercepts').value) || 0;
+            const hardware = document.getElementById('modal-client-hardware').value.trim();
+            const alertPhone = document.getElementById('modal-client-alert-phone').value.trim();
+            const notes = document.getElementById('modal-client-notes').value.trim();
+
+            if (id) {
+                // Update existing
+                const idx = clientsCRM.findIndex(c => c.id === id);
+                if (idx !== -1) {
+                    clientsCRM[idx] = {
+                        ...clientsCRM[idx],
+                        name, category, zone, address,
+                        contact_person: contact,
+                        phone, email, plan,
+                        billing_status: billingStatus,
+                        payment_method: paymentMethod,
+                        baseline_reviews: baseline,
+                        current_reviews: current,
+                        rating,
+                        intercepts_shielded: intercepts,
+                        hardware_count: hardware,
+                        alert_phone: alertPhone,
+                        notes
+                    };
+                }
+            } else {
+                // Add new
+                const newId = `client_custom_${Date.now()}`;
+                const nextMonth = new Date();
+                nextMonth.setDate(nextMonth.getDate() + 30);
+                clientsCRM.unshift({
+                    id: newId,
+                    name, category, zone, address,
+                    contact_person: contact,
+                    phone, email, plan,
+                    billing_status: billingStatus,
+                    next_billing_date: nextMonth.toISOString().split('T')[0],
+                    payment_method: paymentMethod || 'Stripe Card',
+                    setup_fee_paid: true,
+                    hardware_count: hardware || '1 Acrylic NFC Stand',
+                    baseline_reviews: baseline,
+                    current_reviews: current || baseline,
+                    rating,
+                    scans_recorded: 0,
+                    intercepts_shielded: intercepts,
+                    onboarding_date: new Date().toISOString().split('T')[0],
+                    notes,
+                    alert_phone: alertPhone || phone.replace(/\D/g, '')
+                });
+            }
+
+            saveClientsCRM();
+            populateClientDropdowns();
+            populateNFCDropdown();
+            closeClientModal();
+        }
+
+        function deleteClient(clientId) {
+            const client = clientsCRM.find(c => c.id === clientId);
+            if (!client) return;
+            if (confirm(`Are you sure you want to remove "${client.name}" from your active Client CRM?`)) {
+                clientsCRM = clientsCRM.filter(c => c.id !== clientId);
+                saveClientsCRM();
+                populateClientDropdowns();
+                populateNFCDropdown();
+            }
+        }
+
+        function recordClientTap(clientId) {
+            const client = clientsCRM.find(c => c.id === clientId);
+            if (client) {
+                client.scans_recorded = (client.scans_recorded || 0) + 1;
+                saveClientsCRM();
+            }
+        }
+
+        function recordClientReview(clientId) {
+            const client = clientsCRM.find(c => c.id === clientId);
+            if (client) {
+                client.current_reviews = (client.current_reviews || 0) + 1;
+                saveClientsCRM();
+            }
+        }
+
+        function openClientInAIReplies(clientId) {
+            switchTab('ai-replies');
+            const sel = document.getElementById('ai-client-select');
+            if (sel) {
+                for (let i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].value === clientId) {
+                        sel.selectedIndex = i;
+                        onAIClientSelected(clientId);
+                        return;
+                    }
+                }
+            }
+        }
+
+        function openClientInGEOStudio(clientId) {
+            switchTab('geo-studio');
+            const sel = document.getElementById('geo-client-select');
+            if (sel) {
+                for (let i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].value === clientId) {
+                        sel.selectedIndex = i;
+                        onGEOClientSelected(clientId);
+                        return;
+                    }
+                }
+            }
+        }
+
+        function openReportModal(clientId) {
+            const client = clientsCRM.find(c => c.id === clientId);
+            if (!client) return;
+
+            const newReviews = Math.max(0, (client.current_reviews || 0) - (client.baseline_reviews || 0));
+            const estNewCustomers = Math.max(1, Math.round(newReviews * 1.4));
+
+            const message = 
+`Hi ${client.contact_person || 'Team'},
+
+Here is your Monthly Reputation & Review ROI Report for ${client.name} (Saskatoon, SK):
+
+⭐ Current Rating: ${client.rating} Stars
+📈 Total Google Reviews: ${client.current_reviews} (+${newReviews} verified reviews captured since onboarding!)
+🛡️ Shielded Intercepts: ${client.intercepts_shielded || 0} private complaints resolved internally before reaching public Google Maps.
+📱 In-Store NFC Scans: ${client.scans_recorded || 0} customer taps recorded at your counter.
+
+💰 Estimated Value: An additional ${newReviews} reviews translates to an estimated +${estNewCustomers} customer visits this month based on Saskatoon search volume.
+
+Hardware Deployed: ${client.hardware_count || '1 NFC Stand'}
+Next Renewal Date: ${client.next_billing_date || 'Active'}
+
+Thank you for your partnership!
+— YXE Reputation OS`;
+
+            document.getElementById('report-modal-client-subtitle').innerText = `${client.name} • ${client.zone}`;
+            document.getElementById('report-message-text').value = message;
+
+            const cleanPhone = (client.alert_phone || client.phone || '').replace(/\D/g, '');
+            const smsLink = document.getElementById('report-sms-link');
+            if (smsLink) {
+                smsLink.href = `sms:${cleanPhone}?body=${encodeURIComponent(message)}`;
+            }
+
+            document.getElementById('client-report-modal').classList.remove('hidden');
+        }
+
+        function closeReportModal() {
+            document.getElementById('client-report-modal').classList.add('hidden');
+        }
+
+        function copyReportText() {
+            const text = document.getElementById('report-message-text').value;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Monthly Performance Report copied to clipboard! Ready to paste into SMS or WhatsApp.');
+            });
+        }
+
+        function onboardLeadToClient(leadId) {
+            const lead = allLeads.find(l => l.id === leadId);
+            if (!lead) return;
+
+            const existing = clientsCRM.find(c => c.lead_id === leadId || c.name.toLowerCase() === lead.name.toLowerCase());
+            if (existing) {
+                alert(`${lead.name} is already active in your Client CRM! Redirecting to their control panel...`);
+                switchTab('client-admin');
+                const searchInput = document.getElementById('client-search-input');
+                if (searchInput) {
+                    searchInput.value = lead.name;
+                    renderClientAdmin();
+                }
+                return;
+            }
+
+            const nextMonth = new Date();
+            nextMonth.setDate(nextMonth.getDate() + 30);
+            const dateStr = nextMonth.toISOString().split('T')[0];
+
+            const newClient = {
+                id: "client_" + lead.id,
+                lead_id: lead.id,
+                name: lead.name,
+                category: lead.category,
+                zone: lead.zone,
+                address: lead.address,
+                contact_person: "Owner / Manager",
+                phone: lead.phone,
+                email: "",
+                place_id: lead.place_id,
+                google_maps_url: `https://search.google.com/local/writereview?placeid=${lead.place_id}`,
+                plan: lead.tier === 1 ? 't1_growth' : 't2_managed',
+                billing_status: 'paid',
+                next_billing_date: dateStr,
+                payment_method: 'Stripe Card',
+                setup_fee_paid: true,
+                hardware_count: lead.tier === 1 ? '2 Acrylic NFC Stands + 5 Cards' : '1 Acrylic NFC Stand',
+                baseline_reviews: lead.review_count,
+                current_reviews: lead.review_count,
+                rating: lead.est_rating,
+                scans_recorded: 0,
+                intercepts_shielded: 0,
+                onboarding_date: new Date().toISOString().split('T')[0],
+                notes: `Onboarded from ${lead.zone} sales pipeline. Opportunity: ${lead.pain_point}`,
+                alert_phone: (lead.phone || '').replace(/\D/g, '')
+            };
+
+            clientsCRM.unshift(newClient);
+            updateLeadStatus(leadId, lead.tier === 1 ? 'Closed T1 Retainer' : 'Closed T2 Retainer');
+            saveClientsCRM();
+            populateClientDropdowns();
+            populateNFCDropdown();
+
+            alert(`🎉 Successfully onboarded ${lead.name} as an active client!`);
+            switchTab('client-admin');
+        }
+
+        function exportClientsJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clientsCRM, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "saskatoon_clients_crm.json");
+            dlAnchor.click();
+        }
+
+        function triggerClientJSONImport() {
+            const input = document.getElementById('client-import-input');
+            if (input) input.click();
+        }
+
+        function handleClientJSONImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        clientsCRM = imported;
+                        saveClientsCRM();
+                        populateClientDropdowns();
+                        populateNFCDropdown();
+                        alert(`Successfully imported ${imported.length} client stores into your CRM!`);
+                    } else {
+                        alert('Invalid JSON format. Expected an array of client stores.');
+                    }
+                } catch (err) {
+                    alert('Failed to parse JSON file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
 
         // Theme Engine
         function setTheme(themeName) {
@@ -1304,8 +2246,11 @@
                             <option value="Follow Up Required" ${lead.status === 'Follow Up Required' ? 'selected' : ''}>🔵 Follow Up Required</option>
                         </select>
                     </td>
-                    <td class="p-3.5 text-right">
-                        <a href="tel:${lead.phone}" class="px-2.5 py-1 bg-subtle border border-theme hover:bg-slate-200 dark:hover:bg-slate-700 text-primary font-bold rounded text-[11px] transition">
+                    <td class="p-3.5 text-right whitespace-nowrap space-x-1">
+                        <button onclick="onboardLeadToClient('${lead.id}')" title="Onboard this lead as an Active Client" class="px-2 py-1 btn-accent font-bold rounded text-[11px] transition shadow-sm inline-flex items-center gap-1">
+                            <span>⚡</span> Onboard
+                        </button>
+                        <a href="tel:${lead.phone}" class="px-2 py-1 bg-subtle border border-theme hover:bg-slate-200 dark:hover:bg-slate-700 text-primary font-bold rounded text-[11px] transition inline-block">
                             📞 Call
                         </a>
                     </td>
@@ -1395,12 +2340,27 @@
             if (!sel) return;
             sel.innerHTML = '';
 
+            if (clientsCRM && clientsCRM.length > 0) {
+                const groupClients = document.createElement('optgroup');
+                groupClients.label = '🏢 Onboarded Client Stores';
+                clientsCRM.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = `⭐ ${c.name} (${c.zone})`;
+                    groupClients.appendChild(opt);
+                });
+                sel.appendChild(groupClients);
+            }
+
+            const groupLeads = document.createElement('optgroup');
+            groupLeads.label = '🎯 Saskatoon Pipeline Leads';
             allLeads.forEach(lead => {
                 const opt = document.createElement('option');
                 opt.value = lead.id;
                 opt.textContent = `${lead.name} (${lead.zone})`;
-                sel.appendChild(opt);
+                groupLeads.appendChild(opt);
             });
+            sel.appendChild(groupLeads);
 
             updateLiveNFCUrl();
         }
@@ -1423,8 +2383,8 @@
 
         function updateLiveNFCUrl() {
             const sel = document.getElementById('nfc-biz-select');
-            const leadId = sel ? sel.value : (allLeads[0] ? allLeads[0].id : 't2_001');
-            const lead = allLeads.find(l => l.id === leadId) || { name: 'Arisu Korean BBQ', id: 't2_001', zone: '8th Street East' };
+            const leadId = sel ? sel.value : (clientsCRM[0] ? clientsCRM[0].id : (allLeads[0] ? allLeads[0].id : 't2_001'));
+            const lead = clientsCRM.find(c => c.id === leadId) || allLeads.find(l => l.id === leadId) || { name: 'Arisu Korean BBQ', id: 't2_001', zone: '8th Street East' };
 
             // Update simulator header
             const simName = document.getElementById('sim-biz-name');
@@ -2128,7 +3088,9 @@
         // Initialize App
         window.onload = () => {
             loadThemePreferences();
-            loadRepositoryData();
+            loadRepositoryData();        // loads leads → triggers renderClientAdmin() via populateNFCDropdown
+            renderClientAdmin();         // render CRM cards immediately from localStorage seed
+            updateHeaderClientBadge();   // update header badge count
             renderTierStrategyBanner(1);
             renderRedditThreads(REDDIT_THREADS);
             updateSchemaPreview();
